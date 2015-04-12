@@ -9,6 +9,8 @@ class Admin extends CI_Controller {
     $this->load->model('users_model');
     
     $this->load->model('admin_model');
+
+    $this->load->model('student_model');
     
     }
 
@@ -29,6 +31,8 @@ class Admin extends CI_Controller {
     $this->load->view('includes/menu' , $data);
     $this->load->view('admin/index' , $data);
     $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
+  
 	
 
 	}
@@ -103,6 +107,7 @@ class Admin extends CI_Controller {
     $this->load->view('includes/menu' , $data);
     $this->load->view('admin/add_supervisor');
     $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
     
     }
     else {
@@ -113,10 +118,24 @@ class Admin extends CI_Controller {
     $this->load->view('includes/menu' , $data);
     $this->load->view('admin/add_supervisor');
     $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
     
     }
   }
-
+  function deletesupervisor($userid){
+    $this->admin_model->deletesupervisor($userid);
+    
+    $this->load->library('session');
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+      $data['supervisors'] = $this->admin_model->get_supervisors();
+     
+      $this->load->view('includes/header');
+      $this->load->view('includes/menu' , $data);
+      $this->load->view('admin/edit_supervisor');
+      $this->load->view('includes/footer');
+      $this->load->view('includes/datatables');
+ 
+  }
  
    function edit_supervisor(){
       $this->load->library('session');
@@ -130,7 +149,655 @@ class Admin extends CI_Controller {
       $this->load->view('includes/datatables');
    }
 
-   //load pending intern requests
+   //contracts
+
+    function new_contract(){
+      $this->load->library('session');
+    
+     $this->load->helper(array('form', 'url'));
+
+     $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+
+     $this->load->library('form_validation');
+
+            $this->form_validation->set_rules('student_id', 'Student Id ', 'required'); 
+            $this->form_validation->set_rules('tor', 'TOR ', 'required'); 
+            $this->form_validation->set_rules('startdate', 'Start date', 'required');
+            $this->form_validation->set_rules('enddate', 'End date ', 'required');
+                       
+    $student = $this->admin_model->check_student($this->input->post("student_id"));
+    $data['student']= $this->admin_model->check_student($this->input->post("student_id"));
+
+    if ($this->form_validation->run() == FALSE){
+
+  
+    $this->load->view('includes/header');
+    $this->load->view('includes/menu' , $data);
+    $this->load->view('admin/add_contract');
+    $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
+    
+    }
+    else if(count($student) <= 0){
+     
+     $data['warning']= ("The student id does not exist on the database") ;
+     $data['error']= ("Validation error ") ;
+
+
+    $this->load->view('includes/header');
+    $this->load->view('includes/menu' , $data);
+    $this->load->view('admin/add_contract');
+    $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
+    
+    }
+
+  else if($this->input->post("enddate") == $this->input->post("startdate")|| $this->input->post("enddate") < $this->input->post("startdate") || $this->input->post("startdate") < date('Y-m-d') ){
+
+     $data['error']= ("End Date should be greater than Start Date and Start Date greater than the Current Date") ;
+
+    $this->load->view('includes/header');
+    $this->load->view('includes/menu' , $data);
+    $this->load->view('admin/add_contract');
+    $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
+    
+    }
+    else {
+     $data['success']= ("Registration success") ;
+   
+    $this->admin_model->add_contract();
+    
+    $this->load->view('includes/header');
+    $this->load->view('includes/menu' , $data);
+    $this->load->view('admin/add_contract');
+    $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
+    }
+  }
+
+  
+
+   function renew_contract(){
+      $this->load->library('session');
+    
+     $this->load->helper(array('form', 'url'));
+
+     $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+
+     $data['contracts'] = $this->admin_model->get_contracts();
+
+    
+    $this->load->view('includes/header');
+    $this->load->view('includes/menu' , $data);
+    $this->load->view('admin/edit_contract');
+    $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
+    
+    }
+  function editcontract($contract_id){
+      $this->load->library('session');
+    
+     $this->load->helper(array('form', 'url'));
+
+     $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+    
+     $data['contract'] = $this->admin_model->load_contract($contract_id);
+
+
+     $this->load->library('form_validation');
+
+            $this->form_validation->set_rules('tor', 'TOR ', 'required'); 
+            $this->form_validation->set_rules('startdate', 'Start date', 'required');
+            $this->form_validation->set_rules('enddate', 'End date ', 'required');
+
+                       
+    $student = $this->admin_model->check_student($this->input->post("student_id"));
+    $data['student']= $this->admin_model->check_student($this->input->post("student_id"));
+
+    if ($this->form_validation->run() == FALSE){
+
+    $data['error']= ("") ;
+
+    $this->load->view('includes/header');
+    $this->load->view('includes/menu' , $data);
+    $this->load->view('admin/renew_contract' , $data);
+    $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
+    
+    }
+
+  else if($this->input->post("enddate") == $this->input->post("startdate")|| $this->input->post("enddate") < $this->input->post("startdate") ){
+
+     $data['error']= ("End Date should be greater than Start Date and Start Date greater than the Current Date") ;
+
+    $this->load->view('includes/header');
+    $this->load->view('includes/menu' , $data);
+    $this->load->view('admin/renew_contract' , $data);
+    $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
+    
+    }
+    else {
+     $data['success']= ("Registration success") ;
+   
+    $this->admin_model->renew_contract($contract_id);
+    
+    $this->load->view('includes/header');
+    $this->load->view('includes/menu' , $data);
+    $this->load->view('admin/renew_contract' , $data);
+    $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
+    }
+
+  }
+
+    function generate_contracts(){
+      $this->load->library('session');
+      $this->load->helper(array('form', 'url'));
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+    
+
+     $this->load->library('form_validation');
+
+            $this->form_validation->set_rules('student_id', 'Student Id ', 'required'); 
+
+    $student = $this->admin_model->check_student($this->input->post("student_id"));
+    $data['student']= $this->admin_model->check_student($this->input->post("student_id"));
+
+    if ($this->form_validation->run() == FALSE){
+
+    $this->load->view('includes/header');
+    $this->load->view('includes/menu' , $data);
+    $this->load->view('admin/generate_contract');
+    $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
+    
+    }
+    else if(count($student) <= 0){
+
+     $data['error']= ("The student id does not exist on the database") ;
+
+    $this->load->view('includes/header');
+    $this->load->view('includes/menu' , $data);
+    $this->load->view('admin/generate_contract');
+    $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
+    
+    }
+
+    else {
+
+    $this->view_contract($this->input->post("student_id"));
+    
+
+    }
+
+    }
+
+    function view_contract($student_id){
+
+      $this->load->library('session');
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+      $data['contract'] = $this->admin_model->get_contractdetails($student_id);
+      
+      $contract = $this->admin_model->get_contractdetails($student_id);
+
+      if(count($contract) == 0){
+        
+      $contract['0']['request_type'] = "";
+
+      }
+
+      if($contract['0']['request_type']=='intern'){
+
+         $this->load->view('includes/header');
+         $this->load->view('includes/menu' , $data);
+        $this->load->view('admin/intern_contract' ,$data);
+        $this->load->view('includes/footer');
+        $this->load->view('includes/datatables');
+     
+        }
+        else if ($contract['0']['request_type']=='fellow'){
+
+        $this->load->view('includes/header');
+        $this->load->view('includes/menu' , $data);
+        $this->load->view('admin/fellow_contract' ,$data);
+        $this->load->view('includes/footer');
+        $this->load->view('includes/datatables');
+      
+        }
+        else{
+
+        $data['error']= ("The student has no successfull application") ;
+
+        $this->load->view('includes/header');
+        $this->load->view('includes/menu' , $data);
+        $this->load->view('admin/generate_contract');
+        $this->load->view('includes/footer');
+        $this->load->view('includes/datatables');    
+
+      }
+
+         
+
+    }
+  //clearance 
+
+    function clear_student(){
+      $this->load->library('session');
+      $this->load->helper(array('form', 'url'));
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+    
+
+     $this->load->library('form_validation');
+
+            $this->form_validation->set_rules('student_id', 'Student Id ', 'required'); 
+            $this->form_validation->set_rules('cdate', 'Clearance Date ', 'required'); 
+
+    $student = $this->admin_model->check_student($this->input->post("student_id"));
+    $contract = $this->admin_model->check_contractdates($this->input->post("student_id"));
+    $alumni = $this->admin_model->check_alumni($this->input->post("student_id"));
+    
+    $data['student']= $this->admin_model->check_student($this->input->post("student_id"));
+
+    if ($this->form_validation->run() == FALSE){
+
+    $this->load->view('includes/header');
+    $this->load->view('includes/menu' , $data);
+    $this->load->view('admin/clear_student');
+    $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
+    
+    }
+    else if(count($student) <= 0){
+
+     $data['error']= ("The student id does not exist on the database") ;
+
+    $this->load->view('includes/header');
+    $this->load->view('includes/menu' , $data);
+    $this->load->view('admin/clear_student');
+    $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
+    
+    }
+
+   else if(count($alumni) > 0){
+
+     $data['success']= ("This student has already been cleared on the system") ;
+
+    $this->load->view('includes/header');
+    $this->load->view('includes/menu' , $data);
+    $this->load->view('admin/clear_student');
+    $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
+    
+    }
+
+   else if($contract['0']['bdate'] > $this->input->post("cdate")){
+
+     $data['error']= ("Clearance Date Should Not Be Less Than The Contract Start Date") ;
+
+    $this->load->view('includes/header');
+    $this->load->view('includes/menu' , $data);
+    $this->load->view('admin/clear_student');
+    $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
+    
+    }
+
+
+    else {
+
+    $this->admin_model->clear_student();
+
+    $data['success']= ("The student has been cleared and the data saved to student alumni data ") ;
+
+    $this->load->view('includes/header');
+    $this->load->view('includes/menu' , $data);
+    $this->load->view('admin/clear_student');
+    $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
+    
+    }
+    
+
+    }
+
+  //charts
+    function intern_demographics(){
+
+      $this->load->library('session');
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+      $data['maledistribution'] =$this->admin_model->get_maleinterndistribution();
+      $data['femaledistribution'] =$this->admin_model->get_femaleinterndistribution();
+
+      $this->load->view('includes/header');
+      $this->load->view('includes/menu' , $data);
+      $this->load->view('admin/intern_demographics');
+      $this->load->view('includes/footer');
+      $this->load->view('includes/datatables');
+
+    }
+    function fellow_demographics(){
+      $this->load->library('session');
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+      $data['maledistribution'] =$this->admin_model->get_malefellowdistribution();
+      $data['femaledistribution'] =$this->admin_model->get_femalefellowdistribution();
+
+      $this->load->view('includes/header');
+      $this->load->view('includes/menu' , $data);
+      $this->load->view('admin/fellow_demographics');
+      $this->load->view('includes/footer');
+      $this->load->view('includes/datatables');
+
+      
+    }
+
+    function application_charts(){
+     
+      $this->load->library('session');
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+      $data['fapplications'] =$this->admin_model->get_fapplications();
+      $data['iapplications'] =$this->admin_model->get_iapplications();
+
+      $this->load->view('includes/header');
+      $this->load->view('includes/menu' , $data);
+      $this->load->view('admin/application_charts');
+      $this->load->view('includes/footer');
+      $this->load->view('includes/datatables');
+   }
+
+   function request_charts(){
+      $this->load->library('session');
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+      $data['frequests'] =$this->admin_model->get_frequests();
+      $data['irequests'] =$this->admin_model->get_irequests();
+
+      $this->load->view('includes/header');
+      $this->load->view('includes/menu' , $data);
+      $this->load->view('admin/request_charts');
+      $this->load->view('includes/footer');
+      $this->load->view('includes/datatables');
+   }
+
+   //alumni
+
+    function alumni_interns(){
+      $this->load->library('session');
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+      $data['alumni'] =$this->admin_model->alumni_interns();
+     
+       $this->load->view('includes/header');
+      $this->load->view('includes/menu' , $data);
+      $this->load->view('admin/alumni_interns',$data);
+      $this->load->view('includes/footer');
+      $this->load->view('includes/datatables');
+   }
+
+
+    function alumni_fellows(){
+      $this->load->library('session');
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+      $data['alumni'] =$this->admin_model->alumni_fellows();
+     
+       $this->load->view('includes/header');
+      $this->load->view('includes/menu' , $data);
+      $this->load->view('admin/alumni_fellows',$data);
+      $this->load->view('includes/footer');
+      $this->load->view('includes/datatables');
+   }
+   //student
+
+    function student_profile($userid){
+       $this->load->library('session');
+    
+   $this->load->helper('url');
+    
+   $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+   $data['student'] = $this->student_model->get_studentprofile($userid);
+
+    $this->load->view('includes/header');
+    $this->load->view('includes/menu' , $data);
+    $this->load->view('admin/student_profile' , $data);
+    $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
+    }
+   
+   //applications ...
+    function fellowship_application($application_id){
+
+      $this->load->library('session');
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+      $data['application'] = $this->admin_model->get_fellowshipapplication($application_id);
+     
+      $this->load->view('includes/header');
+      $this->load->view('includes/menu' , $data);
+      $this->load->view('admin/fellowship_application' , $data);
+      $this->load->view('includes/footer');
+      $this->load->view('includes/datatables');
+  
+
+    }
+    function internship_application($application_id){
+
+      $this->load->library('session');
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+      $data['application'] = $this->admin_model->get_internshipapplication($application_id);
+     
+      $this->load->view('includes/header');
+      $this->load->view('includes/menu' , $data);
+      $this->load->view('admin/internship_application' , $data);
+      $this->load->view('includes/footer');
+      $this->load->view('includes/datatables');
+  
+
+    }
+
+    function shortlist_fapplication($application_id){
+
+      $this->load->library('session');
+      $this->admin_model->shortlist_fapplication($application_id);
+
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+
+      $data['application'] = $this->admin_model->get_pendingfellowshipapplications();
+     
+      $this->load->view('includes/header');
+      $this->load->view('includes/menu' , $data);
+      $this->load->view('admin/pending_fellowship_applications' , $data);
+      $this->load->view('includes/footer');
+      $this->load->view('includes/datatables');
+   }
+   
+   function reject_fapplication($application_id){
+
+      $this->load->library('session');
+      $this->admin_model->reject_fapplication($application_id);
+
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+
+      $data['application'] = $this->admin_model->get_pendingfellowshipapplications();
+     
+      $this->load->view('includes/header');
+      $this->load->view('includes/menu' , $data);
+      $this->load->view('admin/pending_fellowship_applications' , $data);
+      $this->load->view('includes/footer');
+      $this->load->view('includes/datatables');
+   }
+
+
+    function shortlist_iapplication($application_id){
+
+      $this->load->library('session');
+      $this->admin_model->shortlist_iapplication($application_id);
+
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+
+      $data['application'] = $this->admin_model->get_pendinginternshipapplications();
+     
+      $this->load->view('includes/header');
+      $this->load->view('includes/menu' , $data);
+      $this->load->view('admin/pending_internship_applications' , $data);
+      $this->load->view('includes/footer');
+      $this->load->view('includes/datatables');
+   }
+   
+   function reject_iapplication($application_id){
+
+      $this->load->library('session');
+      $this->admin_model->reject_iapplication($application_id);
+
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+
+      $data['application'] = $this->admin_model->get_pendinginternshipapplications();
+     
+      $this->load->view('includes/header');
+      $this->load->view('includes/menu' , $data);
+      $this->load->view('admin/pending_internship_applications' , $data);
+      $this->load->view('includes/footer');
+      $this->load->view('includes/datatables');
+   }
+
+   function pending_internship_applications(){
+      $this->load->library('session');
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+      $data['application'] = $this->admin_model->get_pendinginternshipapplications();
+     
+      $this->load->view('includes/header');
+      $this->load->view('includes/menu' , $data);
+      $this->load->view('admin/pending_internship_applications' , $data);
+      $this->load->view('includes/footer');
+      $this->load->view('includes/datatables');
+   }
+
+   function pending_fellowship_applications(){
+      $this->load->library('session');
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+      $data['application'] = $this->admin_model->get_pendingfellowshipapplications();
+     
+      $this->load->view('includes/header');
+      $this->load->view('includes/menu' , $data);
+      $this->load->view('admin/pending_fellowship_applications' , $data);
+      $this->load->view('includes/footer');
+      $this->load->view('includes/datatables');
+   }
+
+
+   
+   function ongoing_internship_applications(){
+      $this->load->library('session');
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+      $data['application'] = $this->admin_model->get_ongoinginternshipapplications();
+     
+      $this->load->view('includes/header');
+      $this->load->view('includes/menu' , $data);
+      $this->load->view('admin/ongoing_internship_applications' , $data);
+      $this->load->view('includes/footer');
+      $this->load->view('includes/datatables');
+   }
+
+  function accept_iapplication($application_id ,$supervisor_id,$student_id){
+
+      $this->load->library('session');
+      $this->admin_model->accept_iapplication($application_id,$supervisor_id,$student_id);
+
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+
+      $data['application'] = $this->admin_model->get_ongoinginternshipapplications();
+     
+      $this->load->view('includes/header');
+      $this->load->view('includes/menu' , $data);
+      $this->load->view('admin/ongoing_internship_applications' , $data);
+      $this->load->view('includes/footer');
+      $this->load->view('includes/datatables');
+   }
+
+  function delete_iapplication($application_id){
+
+      $this->load->library('session');
+      $this->admin_model->delete_iapplication($application_id);
+
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+
+      $data['application'] = $this->admin_model->get_processedinternshipapplications();
+     
+      $this->load->view('includes/header');
+      $this->load->view('includes/menu' , $data);
+      $this->load->view('admin/processed_internship_applications' , $data);
+      $this->load->view('includes/footer');
+      $this->load->view('includes/datatables');
+   }
+   
+   function ongoing_fellowship_applications(){
+      $this->load->library('session');
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+      $data['application'] = $this->admin_model->get_ongoingfellowshipapplications();
+     
+      $this->load->view('includes/header');
+      $this->load->view('includes/menu' , $data);
+      $this->load->view('admin/ongoing_fellowship_applications' , $data);
+      $this->load->view('includes/footer');
+      $this->load->view('includes/datatables');
+   }
+
+    function accept_fapplication($application_id ,$supervisor_id,$student_id){
+
+      $this->load->library('session');
+      $this->admin_model->accept_fapplication($application_id ,$supervisor_id,$student_id);
+
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+      $data['application'] = $this->admin_model->get_ongoingfellowshipapplications();
+     
+      $this->load->view('includes/header');
+      $this->load->view('includes/menu' , $data);
+      $this->load->view('admin/ongoing_fellowship_applications' , $data);
+      $this->load->view('includes/footer');
+      $this->load->view('includes/datatables');
+   }
+   
+   function delete_fapplication($application_id){
+
+      $this->load->library('session');
+      $this->admin_model->delete_fapplication($application_id);
+
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+      $data['application'] = $this->admin_model->get_processedfellowshipapplications();
+     
+      $this->load->view('includes/header');
+      $this->load->view('includes/menu' , $data);
+      $this->load->view('admin/processed_fellowship_applications' , $data);
+      $this->load->view('includes/footer');
+      $this->load->view('includes/datatables');
+   }
+
+   function processed_internship_applications(){
+      $this->load->library('session');
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+      $data['application'] = $this->admin_model->get_processedinternshipapplications();
+     
+      $this->load->view('includes/header');
+      $this->load->view('includes/menu' , $data);
+      $this->load->view('admin/processed_internship_applications' , $data);
+      $this->load->view('includes/footer');
+      $this->load->view('includes/datatables');
+   }
+
+   function processed_fellowship_applications(){
+        $this->load->library('session');
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+      $data['application'] = $this->admin_model->get_processedfellowshipapplications();
+     
+      $this->load->view('includes/header');
+      $this->load->view('includes/menu' , $data);
+      $this->load->view('admin/processed_fellowship_applications' , $data);
+      $this->load->view('includes/footer');
+      $this->load->view('includes/datatables');
+   }
+   
+
+
+   //requests
    function pending_internrequests(){
       $this->load->library('session');
       $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
@@ -138,20 +805,20 @@ class Admin extends CI_Controller {
      
       $this->load->view('includes/header');
       $this->load->view('includes/menu' , $data);
-      $this->load->view('admin/pending_internrequests');
+      $this->load->view('admin/pending_internrequests' , $data);
       $this->load->view('includes/footer');
       $this->load->view('includes/datatables');
    }
 
     //load pending intern requests
-   function internvacancyactions(){
+   function ongoing_internrequests(){
       $this->load->library('session');
       $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
-      $data['request'] = $this->admin_model->get_pendingvacancyinternrequests();
+      $data['request'] = $this->admin_model->get_ongoinginternrequests();
      
       $this->load->view('includes/header');
       $this->load->view('includes/menu' , $data);
-      $this->load->view('admin/internvacancyactions');
+      $this->load->view('admin/ongoing_internrequests' , $data);
       $this->load->view('includes/footer');
       $this->load->view('includes/datatables');
    }
@@ -165,20 +832,20 @@ class Admin extends CI_Controller {
      
       $this->load->view('includes/header');
       $this->load->view('includes/menu' , $data);
-      $this->load->view('admin/pending_fellowrequests');
+      $this->load->view('admin/pending_fellowrequests' , $data);
       $this->load->view('includes/footer');
       $this->load->view('includes/datatables');
    }
 
          //load pending fellow requests
-   function fellowvacancyactions(){
+   function ongoing_fellowrequests(){
       $this->load->library('session');
       $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
-      $data['request'] = $this->admin_model->get_pendingvacancyfellowrequests();
+      $data['request'] = $this->admin_model->get_ongoingfellowrequests();
      
       $this->load->view('includes/header');
       $this->load->view('includes/menu' , $data);
-      $this->load->view('admin/fellowvacancyactions');
+      $this->load->view('admin/ongoing_fellowrequests' , $data);
       $this->load->view('includes/footer');
       $this->load->view('includes/datatables');
    }
@@ -192,7 +859,7 @@ class Admin extends CI_Controller {
      
       $this->load->view('includes/header');
       $this->load->view('includes/menu' , $data);
-      $this->load->view('admin/processed_fellowrequests');
+      $this->load->view('admin/processed_fellowrequests' , $data);
       $this->load->view('includes/footer');
       $this->load->view('includes/datatables');
    }
@@ -203,15 +870,72 @@ class Admin extends CI_Controller {
    function processed_internrequests(){
       $this->load->library('session');
       $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
-      $data['request'] = $this->admin_model->get_processedfellowrequests();
+      $data['request'] = $this->admin_model->get_processedinternrequests();
      
       $this->load->view('includes/header');
       $this->load->view('includes/menu' , $data);
-      $this->load->view('admin/processed_internrequests');
+      $this->load->view('admin/processed_internrequests' , $data);
       $this->load->view('includes/footer');
       $this->load->view('includes/datatables');
    }
 
+
+           //load processed fellowship applications
+   function pending_fellowshipapplications(){
+      $this->load->library('session');
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+      $data['request'] = $this->admin_model->get_processedfellowrequests();
+     
+      $this->load->view('includes/header');
+      $this->load->view('includes/menu' , $data);
+      $this->load->view('admin/processed_fellowrequests' , $data);
+      $this->load->view('includes/footer');
+      $this->load->view('includes/datatables');
+   }
+
+
+
+         //load processed internship applications
+   function pending_internshipapplications(){
+      $this->load->library('session');
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+      $data['request'] = $this->admin_model->get_processedfellowrequests();
+     
+      $this->load->view('includes/header');
+      $this->load->view('includes/menu' , $data);
+      $this->load->view('admin/processed_internrequests' , $data);
+      $this->load->view('includes/footer');
+      $this->load->view('includes/datatables');
+   }
+
+
+           //load processed fellowship applications
+   function processed_fellowshipapplications(){
+      $this->load->library('session');
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+      $data['request'] = $this->admin_model->get_processedfellowrequests();
+     
+      $this->load->view('includes/header');
+      $this->load->view('includes/menu' , $data);
+      $this->load->view('admin/processed_fellowrequests' , $data);
+      $this->load->view('includes/footer');
+      $this->load->view('includes/datatables');
+   }
+
+
+
+         //load processed internship applications
+   function processed_internshipapplications(){
+      $this->load->library('session');
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+      $data['request'] = $this->admin_model->get_processedfellowrequests();
+     
+      $this->load->view('includes/header');
+      $this->load->view('includes/menu' , $data);
+      $this->load->view('admin/processed_internrequests' , $data);
+      $this->load->view('includes/footer');
+      $this->load->view('includes/datatables');
+   }
 
    function openvacancy($request_id){       
       $this->load->library('session');
@@ -237,6 +961,7 @@ class Admin extends CI_Controller {
     $this->load->view('includes/menu' , $data);
     $this->load->view('admin/open_vacancy');
     $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
      
      }
      else{
@@ -259,6 +984,7 @@ class Admin extends CI_Controller {
     $this->load->view('includes/menu' , $data);
     $this->load->view('admin/open_vacancy');
     $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
     
     }
     else {
@@ -276,6 +1002,7 @@ class Admin extends CI_Controller {
     $this->load->view('includes/menu' , $data);
     $this->load->view('admin/open_vacancy');
     $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
     
     }
 

@@ -2,10 +2,10 @@
 <body>
 
 
-	<div id="cl-wrapper" class="fixed-menu">
-		<div class="cl-sidebar" >
-			<div class="cl-toggle"><i class="fa fa-bars"></i></div>
-			<div class="cl-navblock">
+  <div id="cl-wrapper" class="fixed-menu">
+    <div class="cl-sidebar" >
+      <div class="cl-toggle"><i class="fa fa-bars"></i></div>
+      <div class="cl-navblock">
         <div class="menu-space">
           <div class="content">
             <div class="side-user">
@@ -18,20 +18,23 @@
             <ul class="cl-vnavigation">
               <li><a href="#"><i class="fa fa-home"></i><span>Profile</span></a>
                 <ul class="sub-menu">
-                   <li class="active"><a href="<?php echo base_url('index.php/admin') ?>">My Profile</a></li>
+                   <li class="active" ><a href="<?php echo base_url('index.php/admin') ?>">My Profile</a></li>
                 </ul>
               </li>
               <li><a href="#"><i class="fa fa-smile-o"></i><span>Supervisors</span></a>
-                <ul class="sub-menu">
-                  <li><a href="<?php echo base_url('index.php/admin/add_supervisor') ?>">Add New</a></li>
+                  <ul class="sub-menu">
+                  <li ><a href="<?php echo base_url('index.php/admin/add_supervisor') ?>">Add New</a></li>
                   <li><a href="<?php echo base_url('index.php/admin/edit_supervisor') ?>">Edit Existing</a></li>
                   </ul>
               </li>
-     
+        
               <li><a href="#"><i class="fa fa-list-alt"></i><span>Requests</span></a>
                 <ul class="sub-menu">
-                  <li><a href="<?php echo base_url('index.php/admin/pending_internrequests') ?>">Pending Intern Requests</a></li>
+                  <li ><a href="<?php echo base_url('index.php/admin/pending_internrequests') ?>">Pending Intern Requests</a></li>
                   <li><a href="<?php echo base_url('index.php/admin/pending_fellowrequests') ?>">Pending Fellow Requests</a></li>
+                  <li><a href="<?php echo base_url('index.php/admin/ongoing_internrequests') ?>">Ongoing Intern Requests</a></li>
+                  <li><a href="<?php echo base_url('index.php/admin/ongoing_fellowrequests') ?>">Ongoing Fellow Requests</a></li>
+               
                   <li><a href="<?php echo base_url('index.php/admin/processed_internrequests') ?>">Processed Intern Requests</a></li>
                   <li><a href="<?php echo base_url('index.php/admin/processed_fellowrequests') ?>">Processed Fellow Requests</a></li>
                 </ul>
@@ -39,48 +42,41 @@
 
               <li><a href="#"><i class="fa fa-table"></i><span>Applications</span></a>
                 <ul class="sub-menu">
-                  <li><a href="form-elements.html">Internship Applications</a></li>
-                  <li><a href="form-validation.html">Fellowship Applications</a></li>
+                  <li><a href="<?php echo base_url('index.php/admin/pending_internship_applications') ?>">Pending Internship Applications</a></li>
+                  <li ><a href="<?php echo base_url('index.php/admin/pending_fellowship_applications') ?>">Pending Fellowship Applications</a></li>
+                  <li ><a href="<?php echo base_url('index.php/admin/ongoing_internship_applications') ?>">Ongoing Internship Applications</a></li>
+                  <li ><a href="<?php echo base_url('index.php/admin/ongoing_fellowship_applications') ?>">Ongoing Fellowship Applications</a></li>
+                  <li ><a href="<?php echo base_url('index.php/admin/processed_internship_applications') ?>">Processed Internship Applications</a></li>
+                  <li ><a href="<?php echo base_url('index.php/admin/processed_fellowship_applications') ?>">Processed Fellowship Applications</a></li>
+
                    </ul>
               </li>
-              <li><a href="#"><i class="fa fa-envelope nav-icon"></i><span>Vacancies</span></a>
-             
-               <ul class="sub-menu">
-                  <li><a href="<?php echo base_url('index.php/admin/internvacancyactions') ?>">New Internship Vacancies</a></li>
-                  <li><a href="email-read.html">Edit Internship Vacancies</a></li>
-                  <li><a href="<?php echo base_url('index.php/admin/fellowvacancyactions') ?>">New Fellowship Vacancies</a></li>
-                  <li><a href="email-read.html">Edit Fellowship Vacancies</a></li>
-                  </ul>
-              </li>
-
-              <li><a href="#"><i class="fa fa-folder"></i><span>Contracts</span></a>
+            
+               <li><a href="#"><i class="fa fa-folder"></i><span>Contracts</span></a>
                 <ul class="sub-menu">
-                  <li><a href="email-inbox.html">New Contract</a></li>
-                  <li><a href="email-read.html">Edit Contracts</a></li>
-                  <li><a href="email-inbox.html">Renew Contracts</a></li>
+           <li ><a href="<?php echo base_url('index.php/admin/new_contract') ?>">New Contract</a></li>
+           <li ><a href="<?php echo base_url('index.php/admin/renew_contract') ?>">Renew Contracts</a></li>
                   </ul>
               </li>
-              <li><a href="#"><i class="fa  fa-bar-chart-o"></i><span>Reports</span></a>
+                <li><a href="#"><i class="fa fa-folder"></i><span>Student Clearance</span></a>
+                <ul class="sub-menu">
+           <li ><a href="<?php echo base_url('index.php/admin/clear_student') ?>">Clear Student </a></li>
+                  </ul></li>
+          <li><a href="#"><i class="fa  fa-bar-chart-o"></i><span>Reports</span></a>
                 <ul class="sub-menu">
                   
-                  <li><a href="charts.html"><span>Applications</span></a></li>
-                  <li><a href="pages-blank.html">Contracts</a></li>
-                  <li><a href="pages-blank-header.html">Requests</a></li>
-                  <li><a href="pages-blank-aside.html">Interns Demographics</a></li>
-                  <li><a href="pages-login.html">Fellow Demographics</a></li>
+                  <li><a href="<?php echo base_url('index.php/admin/application_charts') ?>"><span>Applications</span></a></li>
+                  <li><a href="<?php echo base_url('index.php/admin/generate_contract') ?>">Contracts</a></li>
+                  <li><a href="<?php echo base_url('index.php/admin/request_charts') ?>">Requests</a></li>
+                  <li><a href="<?php echo base_url('index.php/admin/intern_demographics') ?>">Interns Demographics</a></li>
+                  <li><a href="<?php echo base_url('index.php/admin/fellow_demographics') ?>">Fellow Demographics</a></li>
                   </ul>
               </li>
-               <li><a href="#"><i class="fa fa-table"></i><span>Notifications</span></a>
-                <ul class="sub-menu">
-                  <li><a href="tables-general.html">Add</a></li>
-                  <li><a href="tables-datatables.html">Edit</a></li>
-                </ul>
-              </li>              
-             
+               
                <li><a href="#"><i class="fa fa-hdd-o"></i><span>Alumni Data</span></a>
                 <ul class="sub-menu">
-                  <li><a href="tables-general.html">Interns </a></li>
-                  <li><a href="tables-datatables.html">Fellows</a></li>
+                  <li><a href="<?php echo base_url('index.php/admin/alumni_interns') ?>">Interns </a></li>
+                  <li><a href="<?php echo base_url('index.php/admin/alumni_fellows') ?>">Fellows</a></li>
                 </ul>
               </li>
             </ul>
@@ -90,9 +86,10 @@
           <input type="text" class="form-control search" placeholder="Search..." />
           <button id="sidebar-collapse" class="btn btn-default" style=""><i style="color:#fff;" class="fa fa-angle-left"></i></button>
         </div>
-			</div>
-		</div>
-	
+      </div>
+    </div>
+  
+
 		<div class="container-fluid" id="pcont">
 		  <div class="cl-mcont">
 		  
@@ -153,24 +150,26 @@
               
               <div id="settings" class="tab-pane cont">
                 <h3 class="widget-title">Change Account Password</h3>
+                     <div id= 'passmessage'></div>
+             
                 <div class="row friends-list">
-                            <form role="form" class="form-horizontal">
+                            <form role="form" class="form-horizontal" onsubmit="return changepassword()" id = "changepassword">
              
                   <div class="form-group spacer2">
                     <div class="col-sm-3"></div>
-                    <label class="col-sm-9" for="inputPassword3">Change Password</label>
+                    <label class="col-sm-9">Change Password</label>
 
                   </div>
                   <div class="form-group">
-                    <label class="col-sm-3 control-label" for="inputPassword3">Password</label>
+                    <label class="col-sm-3 control-label" for="password">Password</label>
                     <div class="col-sm-9">
-                      <input type="password" placeholder="Password" id="inputPassword3" class="form-control">
+                      <input name="password" type="password" placeholder="Password" id="password" class="form-control">
                     </div>
                   </div>
                   <div class="form-group">
-                    <label class="col-sm-3 control-label" for="inputPassword4">Repeat Password</label>
+                    <label class="col-sm-3 control-label" for="cpassword">Repeat Password</label>
                     <div class="col-sm-9">
-                      <input type="password" placeholder="Password" id="inputPassword4" class="form-control">
+                      <input type="password" placeholder="cpassword" id="cpassword" name="cpassword" class="form-control">
                     </div>
                   </div>
                   <div class="form-group">
@@ -283,6 +282,48 @@
              $('#message').append("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
              $('#message').append("<div class='icon'><i class='fa fa-warning'></i></div>");
              $('#message').append("<strong>Error!</strong> saving changes"); 
+          }
+        },
+      fail:
+        function(data){
+          console.log(data);
+        }
+
+    });
+    
+    return false;
+
+    }
+        function changepassword(){
+      $.ajax({
+      type: 'post',
+      url:'<?php echo base_url("/index.php/user/changepassword")?>',
+      data:$('#changepassword').serialize(),
+      success:
+        function(data){
+          if (data == '1'){
+             $('#passmessage').attr("class" ,"alert alert-success alert-white-alt rounded");
+             $('#passmessage').append("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
+             $('#passmessage').append("<div class='icon'><i class='fa fa-check'></i></div>");
+             $('#passmessage').append("<strong>Success!</strong> Changes has been saved successfully!"); 
+
+            
+          }
+          else if (data == '3'){
+            
+             $('#passmessage').attr("class" ,"alert alert-danger alert-white-alt rounded");
+             $('#passmessage').append("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
+             $('#passmessage').append("<div class='icon'><i class='fa fa-warning'></i></div>");
+             $('#passmessage').append("<strong>Error!</strong> validation error "); 
+          }
+
+          else {
+
+
+             $('#passmessage').attr("class" ,"alert alert-danger alert-white-alt rounded");
+             $('#passmessage').append("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
+             $('#passmessage').append("<div class='icon'><i class='fa fa-warning'></i></div>");
+             $('#passmessage').append("<strong>Error!</strong> password do not match"); 
           }
         },
       fail:

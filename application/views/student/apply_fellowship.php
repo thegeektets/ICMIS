@@ -21,11 +21,6 @@
                   <li><a href="<?php echo base_url("index.php/student");?>">My Profile</a></li>
                 </ul>
               </li>
-              <li><a href="#"><i class="fa fa-smile-o"></i><span>Applications</span></a>
-                <ul class="sub-menu">
-                  <li><a href="ui-elements.html">Edit</a></li>
-                 </ul>
-              </li>
               <li><a href="#"><i class="fa fa-list-alt"></i><span>Vacancies</span></a>
                      <ul class="sub-menu">
                            <li ><a href="<?php echo base_url('index.php/student/internshipvacancies')?>">Internship Vacancies</a></li>
@@ -34,16 +29,15 @@
               </li>
               <li><a href="#"><i class="fa fa-table"></i><span>Projects</span></a>
                 <ul class="sub-menu">
-                  <li><a href="tables-general.html">Add</a></li>
-                  <li><a href="tables-datatables.html">Edit</a></li>
-                </ul>
+                  
+                  <li><a href="<?php echo base_url("index.php/student/projects");?>">Project Details</a></li>
+               </ul>
               </li>              
 
                    <li><a href="#"><i class="fa fa-file"></i><span>Reports</span></a> 
                 <ul class="sub-menu">
-                  <li><a href="pages-blank.html">Projects</a></li>
-                  <li><a href="pages-blank-header.html">Attachment</a></li>
-                  </ul>
+                  <li><a href="<?php echo base_url("index.php/student/project_reports");?>">Projects</a></li>
+                   </ul>
               </li>
             </ul>
           </div>
@@ -78,13 +72,7 @@
               <button type="button" class="btn btn-xs btn-next btn-default" data-last="Finish">Next<i class="icon-arrow-right"></i></button>
             </div>
           </div>
-          <div class="step-content">
-            <form class="form-horizontal group-border-dashed" action="#" data-parsley-namespace="data-parsley-" data-parsley-validate novalidate> 
-              <div class="step-pane active" id="step1">
-                                
-          <form role="form" class="form-horizontal" enctype ='multipart/form-data' <?php echo form_open('student/editstudentdetails/'.$this->session->userdata('username'); ?>
-
-                     <?php if(strlen($success['0'])>0){
+                         <?php if(strlen($success['0'])>0){
                 ?>
 
                <div class="alert alert-success alert-white rounded">
@@ -97,6 +85,13 @@
                <?php
                 }
                 ?>
+
+          <div class="step-content">
+      <div class="step-pane active" id="step1">
+                                
+          <form role="form" onsubmit="return editstudentdetails()"class="form-horizontal" enctype ='multipart/form-data' id="student_details" name="student_details">
+
+        
                <div class="form-group">
                 
                 <div class="col-sm-10">
@@ -105,6 +100,25 @@
 
                 </div>
                 </div>
+                <div class="form-group">
+                
+                <div id="student_message">
+                      <div id="message"></div>   
+             
+                </div>
+                </div>
+                 
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label" for="student_id">Applicants' ID</label>
+                    <div class="col-sm-5">
+                      <input type="text" placeholder="Applicants' ID" id="student_id" value="<?php  echo $student['0']['student_id'];?>"
+                      name="student_id"  required="true" class="form-control">
+                             <div style="color:#DF0D8A" id="student_id-error"> <?php echo form_error('student_id'); ?></div>
+        
+                    </div>
+                   </div>
+                 
+
                   <div class="form-group">
                     <label class="col-sm-3 control-label" for="student_name">Applicants' Name</label>
                     <div class="col-sm-5">
@@ -128,8 +142,8 @@
                                  <div class="form-group">
                     <label class="col-sm-3 control-label" for="student_dob"> Applicants' DOB</label>
                     <div class="col-sm-9">
-                      <div class="input-group date datetime col-md-5 col-xs-7" data-min-view="2" data-date-format="yyyy-mm-dd">
-                    <input class="form-control"   value="<?php echo $student['0']['student_dob'] ?>"  size="16" name="student_dob"type="text" value="" >
+                    <div class="input-group date datetime col-md-5 col-xs-7" data-min-view="2" data-date-format="yyyy-mm-dd">
+                 <input class="form-control"   value="<?php echo $student['0']['student_dob'] ?>"  size="16" name="student_dob"type="text"  >
                     <span class="input-group-addon btn btn-primary"><span class="glyphicon glyphicon-th"></span></span>
                   </div>
                    <div style="color:#DF0D8A" id="gender-error"> <?php echo form_error('student_dob'); ?></div>
@@ -195,17 +209,29 @@
         
                     </div>
                        </div>
+                           <div class="form-group">
+                    <label class="col-sm-3 control-label" for="student_fieldofstudy">Applicants' Field of Study</label>
+                    <div class="col-sm-5">
+                      <input type="text" placeholder="Applicants' Field of Study" id="student_fieldofstudy"  value="<?php  echo $student['0']['student_fieldofstudy']; ?>"
+                      name="student_fieldofstudy"  required="true" class="form-control">
+                             <div style="color:#DF0D8A" id="student_fieldofstudy-error"> <?php echo form_error('student_fieldofstudy'); ?></div>
+        
+                    </div>
+                    </div>
                         <div class="form-group">
-                  <div class="col-sm-offset-2 col-sm-10">
+                  <div class="col-sm-offset-7 col-sm-4">
                     <button class="btn btn-default">Cancel</button>
-                    <button class="btn btn-primary" type="submit">Submit &nbsp;<i class="fa fa-caret-right"></i></button>
+                    <button class="btn btn-success" type="submit"><i class="fa fa-check-square-o"></i> &nbsp; Submit </button>
+                    
+                  </div>
                   </div>
 
                   </form>
-                </div>        
-              </div>
-              <div class="step-pane" id="step2">
-                        <div class="form-group">
+      </div>        
+            
+    <div class="step-pane" id="step2">
+      <form role="form" onsubmit="return placeapplication()"class="form-horizontal" enctype ='multipart/form-data' id="applyfellowship" name="applyfellowship">
+               <div class="form-group">
                 
                 <div class="col-sm-10">
                     
@@ -213,17 +239,15 @@
 
                 </div>
                 </div>
-
-                              <div class="form-group">
-                    <label class="col-sm-3 control-label" for="student_fieldofstudy">Applicants' Field of Study</label>
-                    <div class="col-sm-5">
-                      <input type="text" placeholder="Applicants' Field of Study" id="student_fieldofstudy"  value="<?php  echo set_value('student_fieldofstudy'); ?>"
-                      name="student_fieldofstudy"  required="true" class="form-control">
-                             <div style="color:#DF0D8A" id="student_fieldofstudy-error"> <?php echo form_error('student_fieldofstudy'); ?></div>
-        
-                    </div>
-                       </div>
-                                             <div class="form-group">
+                      <div class="form-group">
+                
+                <div id="fellowship_message">
+             
+                </div>
+                </div>
+      
+                 
+                 <div class="form-group">
                     <label class="col-sm-3 control-label" for="student_fieldofstudy">Proposed Research Title</label>
                     <div class="col-sm-5">
                       <input type="text" placeholder="Proposed Research Title" id="research_title"  value="<?php  echo set_value('research_title'); ?>"
@@ -266,10 +290,10 @@
                 <label class="col-sm-3 control-label">Fellowship Requirements</label>
                 <div class="col-sm-6">
                   <div class="radio"> 
-                    <label> <input type="checkbox" class="icheck" name="applicant_requirements"  value="Accident Cover"> Personal Accident Cover</label> 
+                    <label> <input type="checkbox" class="icheck" name="applicant_requirements[]"  value="Accident Cover"> Personal Accident Cover</label> 
                   </div>
                   <div class="radio"> 
-                    <label> <input type="checkbox" name="applicant_requirements" class="icheck" value="Medical Insuarance"> Medical Insuarance</label> 
+                    <label> <input type="checkbox" name="applicant_requirements[]" class="icheck" value="Medical Insuarance"> Medical Insuarance</label> 
                   </div>
                 </div>
               </div>
@@ -286,52 +310,71 @@
                    
                   </div>
                   
-                                  <div class="form-group">
-                  <div class="col-sm-offset-2 col-sm-10">
+                                             <div class="form-group">
+                  <div class="col-sm-offset-7 col-sm-4">
                     <button class="btn btn-default">Cancel</button>
-                    <button data-wizard="#wizard1" class="btn btn-primary wizard-next">Next Step <i class="fa fa-caret-right"></i></button>
+                    <button class="btn btn-success" type="submit"><i class="fa fa-check-square-o"></i> &nbsp; Submit </button>
+                    
                   </div>
-                </div>     
-    
-
-
-              </div>
-              <div class="step-pane" id="step3">
-                          <div class="col-sm-10">
+                  </div>
+                  </form> 
+          </div>
+            
+      <div class="step-pane" id="step3">
+            <form  onsubmit="return uploadcover()"class="form-horizontal" enctype ='multipart/form-data' id="coverletter" name="coverletter">
+   
+                <div class="col-sm-10">
                     
                 <h4  style="margin-left:50px;color:#7c3886;"class="widget-title">Applicants' Cover Letter </h4>
 
                 </div>
+
+                <div class="form-group">
+                
+                <div id="cover_message">
+             
+                </div>
+                </div>
               
-                                    <div class="form-group">
-                    <label class="col-sm-3 control-label" for="applicant_coverletter">Applicants' Cover Letter</label>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" for="applicant_coverletter">Cover Letter</label>
                     <div class="col-sm-9">
                    
-                           <div class="fileinput fileinput-new" data-provides="fileinput">
-                      <div>
+                    <div class="fileinput fileinput-new" data-provides="fileinput">
                         <span class="btn btn-primary btn-file"><span class="fileinput-new">Select File</span>
-                        <span class="fileinput-exists">Change</span><input type="file" name="applicant_coverletter"></span>
-                      </div>
+                        <input type="file" name="applicant_coverletter"></span>
+                      
                     </div>
 
-                <div  style="color:#DF0D8A"  id="applicant_coverletter-error"> <?php echo form_error('applicant_coverletter'); ?></div>
                     </div>
-                  </div> 
-                                  <div class="form-group">
-                  <div class="col-sm-offset-2 col-sm-10">
+               </div> 
+               <div class="form-group">
+                  <div class="col-sm-offset-7 col-sm-4">
                     <button class="btn btn-default">Cancel</button>
-                    <button data-wizard="#wizard1" class="btn btn-primary wizard-next">Next Step <i class="fa fa-caret-right"></i></button>
+                    <button class="btn btn-success" type="submit"><i class="fa fa-check-square-o"></i> &nbsp; Submit </button>
+                    
                   </div>
-                </div>     
-              </div>
+                  </div>
+          </form> 
+     </div>
               <div class="step-pane" id="step4">
+                 <form  onsubmit="return uploadcv()"class="form-horizontal" enctype ='multipart/form-data' id="cv" name="cv">
+   
+         
                                                               <div class="col-sm-10">
                     
                 <h4  style="margin-left:50px;color:#7c3886;"class="widget-title">Applicants' Curriculum Vitae</h4>
 
                 </div>
+
+                <div class="form-group">
+                
+                <div id="cv_message">
+             
+                </div>
+                </div>
                        <div class="form-group">
-                    <label class="col-sm-3 control-label" for="position_enddate">Applicants' Curriculum Vitae</label>
+                    <label class="col-sm-3 control-label" for="position_enddate">Curriculum Vitae</label>
                     <div class="col-sm-9">
                    
                            <div class="fileinput fileinput-new" data-provides="fileinput">
@@ -347,19 +390,30 @@
                                   <div class="form-group">
                   <div class="col-sm-offset-2 col-sm-10">
                     <button class="btn btn-default">Cancel</button>
-                    <button data-wizard="#wizard1" class="btn btn-primary wizard-next">Next Step <i class="fa fa-caret-right"></i></button>
-                  </div>
-                </div>     
+                    <button class="btn btn-success" type="submit"><i class="fa fa-check-square-o"></i> &nbsp; Submit </button>
+              </div>
+                </div>   
+                   </form> 
+  
               </div>
             
              <div class="step-pane" id="step5">
+                <form  onsubmit="return uploadil()"class="form-horizontal" enctype ='multipart/form-data' id="il" name="il">
+   
+         
                                          <div class="col-sm-10">
                     
                 <h4  style="margin-left:50px;color:#7c3886;"class="widget-title">Applicants' Introduction Letter </h4>
 
                 </div>
+                   <div class="form-group">
+                
+                <div id="il_message">
+             
+                </div>
+                </div>
                 <div class="form-group">
-                    <label class="col-sm-3 control-label" for="introductionletter">Applicants' Introduction Letter</label>
+                    <label class="col-sm-3 control-label" for="introductionletter">Introduction Letter</label>
                     <div class="col-sm-9">
                    
                            <div class="fileinput fileinput-new" data-provides="fileinput">
@@ -374,17 +428,230 @@
                   </div>
                                   <div class="form-group">
                   <div class="col-sm-offset-2 col-sm-10">
-                    <button class="btn btn-default">Cancel</button>
-                    <button  style="padding-left:20px;"data-wizard="#wizard1" class="btn btn-primary wizard-next">Finish <i class="fa fa-file"></i></button>
-                  </div>
-                </div>     
+                   <button class="btn btn-default">Cancel</button>
+                    <button class="btn btn-success" type="submit"><i class="fa fa-check-square-o"></i> &nbsp; Submit </button>
+               </div>
+                </div>
+                </form>     
              </div>
            
           </div>
         </div>
 
-  
+<script src="<?php echo base_url("/assets/js/jquery.js")?>"></script>
+       <script type="text/javascript">
+      
+    
+    function editstudentdetails(){
+      $.ajax({
+      type: 'post',
+      url:'<?php echo base_url("/index.php/student/editstudentdetails/")?>',
+      data:$('#student_details').serialize(),
+      success:
+        function(data){
+          if (data == '1'){
+             $('#student_message').attr("class" ,"alert alert-success alert-white rounded");
+             $('#student_message').append("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
+             $('#student_message').append("<div class='icon'><i class='fa fa-check'></i></div>");
+             $('#student_message').append("<strong>Success!</strong> Changes has been saved successfully!"); 
 
-                </body>
+            
+          }
+          else{
+            
+             $('#student_message').attr("class" ,"alert alert-danger alert-white rounded");
+             $('#student_message').append("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
+             $('#student_message').append("<div class='icon'><i class='fa fa-warning'></i></div>");
+             $('#student_message').append("<strong style='margin-left:50px'>&nbsp;&nbsp;Error!</strong> saving changes"); 
+
+   
+
+          }
+        },
+      fail:
+        function(data){
+          console.log(data);
+        }
+
+    });
+    
+    return false;
+
+    }
+        function placeapplication(){
+      $.ajax({
+      type: 'post',
+      url:'<?php echo base_url("/index.php/student/placefellowshipapplication/".$this->session->userdata('vacancyid'))?>',
+      data:$('#applyfellowship').serialize(),
+      success:
+        function(data){
+          if (data == '1'){
+             $('#fellowship_message').attr("class" ,"alert alert-success alert-white rounded");
+             $('#fellowship_message').append("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
+             $('#fellowship_message').append("<div class='icon'><i class='fa fa-check'></i></div>");
+             $('#fellowship_message').append("<strong>Success!</strong> Your application has been sent to CDU for processing you will be notified on the progress!"); 
+
+            
+          }
+          else{
+            
+             $('#fellowship_message').attr("class" ,"alert alert-danger alert-white rounded");
+             $('#fellowship_message').append("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
+             $('#fellowship_message').append("<div class='icon'><i class='fa fa-warning'></i></div>");
+             $('#fellowship_message').append("<strong style='margin-left:50px'>&nbsp;&nbsp;Error!</strong> submitting Application"); 
+
+   
+
+          }
+        },
+      fail:
+        function(data){
+          console.log(data);
+        }
+
+    });
+    
+    return false;
+
+    }
+
+      function uploadcover(){
+
+    var form = document.getElementById('coverletter');
+    var myfd = new FormData(form);
+
+      $.ajax({
+      
+      type: 'post',
+      url:'<?php echo base_url("/index.php/student/uploadcover/".$this->session->userdata('vacancyid'))?>',
+      data:myfd,
+      processData: false,
+      contentType:false,
+      
+       success:
+        function(data){
+          if (data == '1'){
+             $('#cover_message').attr("class" ,"alert alert-success alert-white rounded");
+             $('#cover_message').append("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
+             $('#cover_message').append("<div class='icon'><i class='fa fa-check'></i></div>");
+             $('#cover_message').append("<strong>Success!</strong> Your cover letter has been sent to CDU!"); 
+
+            
+          }
+          else{
+            
+             $('#cover_message').attr("class" ,"alert alert-danger alert-white rounded");
+             $('#cover_message').append("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
+             $('#cover_message').append("<div class='icon'><i class='fa fa-warning'></i></div>");
+             $('#cover_message').append("<strong style='margin-left:50px'>&nbsp;&nbsp;Error!</strong> uploading cover letter"); 
+
+   
+
+          }
+        },
+      fail:
+        function(data){
+          console.log(data);
+        }
+
+    });
+    
+    return false;
+
+    }
+   
+      function uploadcv(){
+
+    var form = document.getElementById('cv');
+    var myfd = new FormData(form);
+
+      $.ajax({
+      
+      type: 'post',
+      url:'<?php echo base_url("/index.php/student/uploadcv/".$this->session->userdata('vacancyid'))?>',
+      data:myfd,
+      processData: false,
+      contentType:false,
+      
+       success:
+        function(data){
+          if (data == '1'){
+             $('#cv_message').attr("class" ,"alert alert-success alert-white rounded");
+             $('#cv_message').append("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
+             $('#cv_message').append("<div class='icon'><i class='fa fa-check'></i></div>");
+             $('#cv_message').append("<strong>Success!</strong> Your Curriculum Vitae has been sent to CDU!"); 
+
+            
+          }
+          else{
+            
+             $('#cv_message').attr("class" ,"alert alert-danger alert-white rounded");
+             $('#cv_message').append("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
+             $('#cv_message').append("<div class='icon'><i class='fa fa-warning'></i></div>");
+             $('#cv_message').append("<strong style='margin-left:50px'>&nbsp;&nbsp;Error!</strong> uploading Curriculum Vitae"); 
+
+   
+
+          }
+        },
+      fail:
+        function(data){
+          console.log(data);
+        }
+
+    });
+    
+    return false;
+
+    }
+     function uploadil(){
+
+    var form = document.getElementById('il');
+    var myfd = new FormData(form);
+
+      $.ajax({
+      
+      type: 'post',
+      url:'<?php echo base_url("/index.php/student/uploadil/".$this->session->userdata('vacancyid'))?>',
+      data:myfd,
+      processData: false,
+      contentType:false,
+      
+       success:
+        function(data){
+          if (data == '1'){
+             $('#il_message').attr("class" ,"alert alert-success alert-white rounded");
+             $('#il_message').append("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
+             $('#il_message').append("<div class='icon'><i class='fa fa-check'></i></div>");
+             $('#il_message').append("<strong>Success!</strong> Your Introduction Letter has been sent to CDU!"); 
+
+            
+          }
+          else{
+            
+             $('#il_message').attr("class" ,"alert alert-danger alert-white rounded");
+             $('#il_message').append("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
+             $('#il_message').append("<div class='icon'><i class='fa fa-warning'></i></div>");
+             $('#il_message').append("<strong style='margin-left:50px'>&nbsp;&nbsp;Error!</strong> uploading Introduction Letter"); 
+
+   
+
+          }
+        },
+      fail:
+        function(data){
+          console.log(data);
+        }
+
+    });
+    
+    return false;
+
+    }
+
+
+</script>
+
+</body>
 
 </html>

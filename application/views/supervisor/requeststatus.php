@@ -32,14 +32,14 @@
               </li>
                     <li><a href="#"><i class="fa fa-user"></i><span>Students</span></a>
                 <ul class="sub-menu">
-                  <li><a href="ui-elements.html">Interns</a></li>
-                  <li><a href="ui-buttons.html">Fellows</a></li>
-                </ul>
+                  <li><a href="<?php echo base_url('index.php/supervisor/supervisorintern');?>">Interns</a></li>
+                  <li><a href="<?php echo base_url('index.php/supervisor/supervisorfellow')?>">Fellows</a></li>
+                  </ul>
               </li>
               <li><a href="#"><i class="fa fa-table"></i><span>Reports</span></a>
                 <ul class="sub-menu">
-                  <li><a href="tables-general.html">Interns</a></li>
-                  <li><a href="tables-datatables.html">Fellows</a></li>
+                    <li><a href="<?php echo base_url("index.php/supervisor/project_reports");?>">Projects</a></li>
+              
                 </ul>
               </li>              
           </div>
@@ -74,23 +74,16 @@
               <h3>Your Interns Requests</h3>
             </div>
             <div class="content">
+                     <?php for ($i=0;$i<count($irequests);$i++){
+           ?>
               <div class="list-group">
                 <a href="#" class="list-group-item ">
-                <h5 class="list-group-item-heading">John Doe</h5>
-                <div><i class="fa fa-mobile-phone"></i> 457 760 3244</div>
-                <div><i class="fa fa-envelope"></i> johndoe@emailserver.com</div>
+                <h5 class="list-group-item-heading"><strong> Title : </strong><?php echo " ".$irequests[$i]['researchtitle_purposeinternship']?></h5>
+                <div><strong class="">Summary :</strong><?php  echo " ".$irequests[$i]['summary']?></div>
+                <div><strong class="">Status :</strong> <?php echo " ".$irequests[$i]['request_status']?></div>
                 </a>
-                <a href="#" class="list-group-item">
-                <h5 class="list-group-item-heading">Mark Anonymous Person</h5>
-                <div><i class="fa fa-mobile-phone"></i> 547 457 7484</div>
-                <div><i class="fa fa-envelope"></i> markanonymous@emailserver.com</div>
-                </a>
-                <a href="#" class="list-group-item">
-                <h5 class="list-group-item-heading">Jessica Smith Norway</h5>
-                <div><i class="fa fa-mobile-phone"></i> 595 541 9578</div>
-                <div><i class="fa fa-envelope"></i> jessysmith@emailserver.com</div>
-                </a>
-              </div>            
+               </div>
+               <?php } ?>            
             </div>
           </div>
               <div class="block-flat">
@@ -98,23 +91,17 @@
               <h3>Your Fellows Requests</h3>
             </div>
             <div class="content">
+             
+                     <?php for ($i=0;$i<count($frequests);$i++){
+           ?>
               <div class="list-group">
                 <a href="#" class="list-group-item ">
-                <h5 class="list-group-item-heading">John Doe</h5>
-                <div><i class="fa fa-mobile-phone"></i> 457 760 3244</div>
-                <div><i class="fa fa-envelope"></i> johndoe@emailserver.com</div>
+                <h5 class="list-group-item-heading"><strong> Title : </strong><?php echo " ".$frequests[$i]['researchtitle_purposeinternship']?></h5>
+                <div><strong class="">Summary :</strong><?php  echo " ".$frequests[$i]['summary']?></div>
+                <div><strong class="">Status :</strong> <?php echo " ".$frequests[$i]['request_status']?></div>
                 </a>
-                <a href="#" class="list-group-item">
-                <h5 class="list-group-item-heading">Mark Anonymous Person</h5>
-                <div><i class="fa fa-mobile-phone"></i> 547 457 7484</div>
-                <div><i class="fa fa-envelope"></i> markanonymous@emailserver.com</div>
-                </a>
-                <a href="#" class="list-group-item">
-                <h5 class="list-group-item-heading">Jessica Smith Norway</h5>
-                <div><i class="fa fa-mobile-phone"></i> 595 541 9578</div>
-                <div><i class="fa fa-envelope"></i> jessysmith@emailserver.com</div>
-                </a>
-              </div>            
+               </div>
+               <?php } ?>                       
             </div>
           </div>
 

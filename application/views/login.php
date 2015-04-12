@@ -10,7 +10,7 @@
 	<div class="middle-login">
 		<div class="block-flat">
 			<div class="header">							
-			<h4 style="color:#fff;font-weight: 300;" class="text-center"><img class="logo-img" src="<?php echo base_url('/assets/images/logo.jpg')?>" width="50px" alt=""/>User Login</h4> 	</div>
+			<h4 style="color:#fff;font-weight: 300;" class="text-center"><img class="logo-img" src="<?php echo base_url('/assets/images/logo.png')?>" width="50px" alt=""/>User Login</h4> 	</div>
 			<div>
 			     <?php if(strlen($success)>0){
                 ?>

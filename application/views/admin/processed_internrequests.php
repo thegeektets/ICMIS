@@ -32,57 +32,56 @@
                 <ul class="sub-menu">
                   <li ><a href="<?php echo base_url('index.php/admin/pending_internrequests') ?>">Pending Intern Requests</a></li>
                   <li><a href="<?php echo base_url('index.php/admin/pending_fellowrequests') ?>">Pending Fellow Requests</a></li>
+
+                  <li ><a href="<?php echo base_url('index.php/admin/ongoing_internrequests') ?>">Ongoing Intern Requests</a></li>
+                  <li><a href="<?php echo base_url('index.php/admin/ongoing_fellowrequests') ?>">Ongoing Fellow Requests</a></li>
+
                   <li class="active"><a href="<?php echo base_url('index.php/admin/processed_internrequests') ?>">Processed Intern Requests</a></li>
                   <li><a href="<?php echo base_url('index.php/admin/processed_fellowrequests') ?>">Processed Fellow Requests</a></li>
                 </ul>
               </li>
 
-              <li><a href="#"><i class="fa fa-table"></i><span>Applications</span></a>
+            <li><a href="#"><i class="fa fa-table"></i><span>Applications</span></a>
                 <ul class="sub-menu">
-                  <li><a href="form-elements.html">Internship Applications</a></li>
-                  <li><a href="form-validation.html">Fellowship Applications</a></li>
+                  <li><a href="<?php echo base_url('index.php/admin/pending_internship_applications') ?>">Pending Internship Applications</a></li>
+                  <li ><a href="<?php echo base_url('index.php/admin/pending_fellowship_applications') ?>">Pending Fellowship Applications</a></li>
+                  <li ><a href="<?php echo base_url('index.php/admin/ongoing_internship_applications') ?>">Ongoing Internship Applications</a></li>
+                  <li ><a href="<?php echo base_url('index.php/admin/ongoing_fellowship_applications') ?>">Ongoing Fellowship Applications</a></li>
+                  <li ><a href="<?php echo base_url('index.php/admin/processed_internship_applications') ?>">Processed Internship Applications</a></li>
+                  <li ><a href="<?php echo base_url('index.php/admin/processed_fellowship_applications') ?>">Processed Fellowship Applications</a></li>
+
                    </ul>
               </li>
-              <li><a href="#"><i class="fa fa-envelope nav-icon"></i><span>Vacancies</span></a>
-            
-               <ul class="sub-menu">
-                  <li><a href="<?php echo base_url('index.php/admin/internvacancyactions') ?>">New Internship Vacancies</a></li>
-                  <li><a href="email-read.html">Edit Internship Vacancies</a></li>
-                  <li><a href="<?php echo base_url('index.php/admin/fellowvacancyactions') ?>">New Fellowship Vacancies</a></li>
-                  <li><a href="email-read.html">Edit Fellowship Vacancies</a></li>
-                  </ul>
-              </li>
+              
 
-              <li><a href="#"><i class="fa fa-folder"></i><span>Contracts</span></a>
+                <li><a href="#"><i class="fa fa-folder"></i><span>Contracts</span></a>
                 <ul class="sub-menu">
-                  <li><a href="email-inbox.html">New Contract</a></li>
-                  <li><a href="email-read.html">Edit Contracts</a></li>
-                  <li><a href="email-inbox.html">Renew Contracts</a></li>
+           <li ><a href="<?php echo base_url('index.php/admin/new_contract') ?>">New Contract</a></li>
+           <li ><a href="<?php echo base_url('index.php/admin/renew_contract') ?>">Renew Contracts</a></li>
                   </ul>
               </li>
-              <li><a href="#"><i class="fa  fa-bar-chart-o"></i><span>Reports</span></a>
+              <li><a href="#"><i class="fa fa-folder"></i><span>Student Clearance</span></a>
+                <ul class="sub-menu">
+           <li ><a href="<?php echo base_url('index.php/admin/clear_student') ?>">Clear Student</a></li>
+                  </ul></li>
+         <li><a href="#"><i class="fa  fa-bar-chart-o"></i><span>Reports</span></a>
                 <ul class="sub-menu">
                   
-                  <li><a href="charts.html"><span>Applications</span></a></li>
-                  <li><a href="pages-blank.html">Contracts</a></li>
-                  <li><a href="pages-blank-header.html">Requests</a></li>
-                  <li><a href="pages-blank-aside.html">Interns Demographics</a></li>
-                  <li><a href="pages-login.html">Fellow Demographics</a></li>
+                  <li><a href="<?php echo base_url('index.php/admin/application_charts') ?>"><span>Applications</span></a></li>
+                  <li><a href="<?php echo base_url('index.php/admin/generate_contract') ?>">Contracts</a></li>
+                  <li><a href="<?php echo base_url('index.php/admin/request_charts') ?>">Requests</a></li>
+                  <li><a href="<?php echo base_url('index.php/admin/intern_demographics') ?>">Interns Demographics</a></li>
+                  <li><a href="<?php echo base_url('index.php/admin/fellow_demographics') ?>">Fellow Demographics</a></li>
                   </ul>
               </li>
-               <li><a href="#"><i class="fa fa-table"></i><span>Notifications</span></a>
-                <ul class="sub-menu">
-                  <li><a href="tables-general.html">Add</a></li>
-                  <li><a href="tables-datatables.html">Edit</a></li>
-                </ul>
-              </li>              
-             
+               
                <li><a href="#"><i class="fa fa-hdd-o"></i><span>Alumni Data</span></a>
                 <ul class="sub-menu">
-                  <li><a href="tables-general.html">Interns </a></li>
-                  <li><a href="tables-datatables.html">Fellows</a></li>
+                  <li><a href="<?php echo base_url('index.php/admin/alumni_interns') ?>">Interns </a></li>
+                  <li><a href="<?php echo base_url('index.php/admin/alumni_fellows') ?>">Fellows</a></li>
                 </ul>
               </li>
+              
             </ul>
           </div>
         </div>

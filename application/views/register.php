@@ -8,7 +8,7 @@
 	<div class="middle-sign-up">
 		<div class="block-flat">
 			<div class="header">							
-				<h4 class="text-center" style="color:#fff"><img class="logo-img" src="<?php echo base_url('/assets/images/logo.jpg')?>" alt=""/> Register User</h4>
+				<h4 class="text-center" style="color:#fff"><img class="logo-img" src="<?php echo base_url('/assets/images/logo.png')?>" alt=""/> Register User</h4>
 
 					
 			</div>

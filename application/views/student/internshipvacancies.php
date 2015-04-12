@@ -21,11 +21,6 @@
                   <li ><a href="<?php echo base_url("index.php/student");?>">My Profile</a></li>
                 </ul>
               </li>
-              <li><a href="#"><i class="fa fa-smile-o"></i><span>Applications</span></a>
-                <ul class="sub-menu">
-                  <li><a href="ui-elements.html">Edit</a></li>
-                 </ul>
-              </li>
               <li><a href="#"><i class="fa fa-list-alt"></i><span>Vacancies</span></a>
                 <ul class="sub-menu">
                   <li class="active"><a href="<?php echo base_url('index.php/student/internshipvacancies')?>">Internship Vacancies</a></li>
@@ -34,16 +29,14 @@
               </li>
               <li><a href="#"><i class="fa fa-table"></i><span>Projects</span></a>
                 <ul class="sub-menu">
-                  <li><a href="tables-general.html">Add</a></li>
-                  <li><a href="tables-datatables.html">Edit</a></li>
-                </ul>internship
+                   <li><a href="<?php echo base_url("index.php/student/projects");?>">Project Details</a></li>
+                  </ul>
               </li>              
 
                    <li><a href="#"><i class="fa fa-file"></i><span>Reports</span></a>
                 <ul class="sub-menu">
-                  <li><a href="pages-blank.html">Projects</a></li>
-                  <li><a href="pages-blank-header.html">Attachment</a></li>
-                  </ul>
+                   <li><a href="<?php echo base_url("index.php/student/project_reports");?>">Project</a></li>
+                    </ul>
               </li>
             </ul>
           </div>

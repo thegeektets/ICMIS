@@ -1,6 +1,6 @@
 
   <script type="text/javascript" src="<?php echo base_url('/assets/js/jquery.js')?>"></script>
-    <script type="text/javascript" src="<?php echo base_url('/assets/js/jquery.gritter/js/jquery.gritter.js')?>"></script>
+  <script type="text/javascript" src="<?php echo base_url('/assets/js/jquery.gritter/js/jquery.gritter.js')?>"></script>
 
   <script type="text/javascript" src="<?php echo base_url('/assets/js/jquery.nanoscroller/jquery.nanoscroller.js')?>"></script>
 	<script type="text/javascript" src="<?php echo base_url('/assets/js/behaviour/general.js')?>"></script>
@@ -14,24 +14,8 @@
   <script src="<?php echo base_url('/assets/js/skycons/skycons.js')?>" type="text/javascript"></script>
   <script src="<?php echo base_url('/assets/js/bootstrap.slider/js/bootstrap-slider.js')?>" type="text/javascript"></script>
   <script src="<?php echo base_url('/assets/js/intro.js/intro.js')?>" type="text/javascript"></script>
- <!--
-  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false"></script>
--->   
-
-  <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script type="text/javascript">
-      $(document).ready(function(){
-        //initialize the javascript
-        App.init();
-        App.dashBoard();        
-        
-          introJs().setOption('showBullets', false).start();
-
-      });
-    </script>
-    <script src="<?php echo base_url('/assets/js/behaviour/voice-commands.js')?>"></script>
+ 
+  <script src="<?php echo base_url('/assets/js/behaviour/voice-commands.js')?>"></script>
   <script src="<?php echo base_url('/assets/js/bootstrap/dist/js/bootstrap.min.js')?>"></script>
 	<script type="text/javascript" src="<?php echo base_url('/assets/js/jquery.flot/jquery.flot.js')?>"></script>
 	<script type="text/javascript" src="<?php echo base_url('/assets/js/jquery.flot/jquery.flot.pie.js')?>"></script>

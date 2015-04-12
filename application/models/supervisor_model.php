@@ -21,7 +21,7 @@ class supervisor_model extends CI_Model {
    supervisor.user_id and user.username = '".$username."'");
     return $query->result_array();}
 
-    public function get_userid($username){
+   public function get_userid($username){
     $query = $this->db->query("select userid from user where user.username = '".$username."'");
      $query->result();
         foreach ($query->result() as $row)
@@ -30,7 +30,7 @@ class supervisor_model extends CI_Model {
         }
     }
 
-     public function check_supervisor($username){
+    public function check_supervisor($username){
       $userid =$this->get_userid($username);
 
 
@@ -77,12 +77,34 @@ class supervisor_model extends CI_Model {
          $sql = "INSERT INTO tools (product_id,tool) " .
             "VALUES (" . $this->db->escape($product_id) . ",".$this->db->escape($tool).")";
             $this->db->query($sql);
-
-
-
     }
     
+   //student
 
+   public function get_supervisorfellows(){
+        $this->load->library('session');
+        $user =$this->session->userdata('username');
+          
+        $userid = $this->get_userid($user);
+ 
+          $query = $this->db->query('select * from student_details ,supervisor_allocation,vacancy_request,user where 
+            student_details.student_id = supervisor_allocation.student_id and user.userid = student_details.user_id and 
+            vacancy_request.supervisor_id ="'.$userid.'" and vacancy_request.request_type="fellow" and student_details.student_state ="ongoing"');
+          return $query->result_array();
+
+   }
+
+   public function get_supervisorinterns(){
+          $this->load->library('session');
+        $user =$this->session->userdata('username');
+          
+        $userid = $this->get_userid($user);
+ 
+          $query = $this->db->query('select * from student_details ,supervisor_allocation,vacancy_request,user where 
+            student_details.student_id = supervisor_allocation.student_id and user.userid = student_details.user_id and 
+            vacancy_request.supervisor_id ="'.$userid.'" and vacancy_request.request_type="intern" and student_details.student_state ="ongoing"');
+          return $query->result_array();
+   }
 
     public function get_projects($username){
         $developer_id = $this->get_developer($username);
@@ -128,7 +150,21 @@ class supervisor_model extends CI_Model {
 
             
     }
-     public function newfellowrequest() {
+     public function get_irequests($username){
+      $userid = $this->get_userid($username);
+     
+      $query = "select * from vacancy_request where request_type = 'intern' and supervisor_id ='".$userid."'";
+     
+     return $this->db->query($query)->result_array();}
+
+     public function get_frequests($username){
+      $userid = $this->get_userid($username);
+     
+      $query = "select * from vacancy_request where request_type = 'fellow' and supervisor_id ='".$userid."'";
+     
+     return $this->db->query($query)->result_array();}
+
+ public function newfellowrequest() {
         $this->load->library('session');
         $user =$this->session->userdata('username');
           
@@ -167,79 +203,8 @@ class supervisor_model extends CI_Model {
 
             
     }
-    function addskill() {
-        $skill = $this->input->post("skill");
-        $this->load->library('session');
-        $user =$this->session->userdata('username');
-            
-            $sql = "INSERT INTO skills (username,skill) " .
-            "VALUES (" . $this->db->escape($user) . ",".$this->db->escape($skill) .")";
-            $this->db->query($sql);
-      }
-    
-      function addproject() {
-        $category = $this->input->post("category");
-        $desc = $this->input->post("desc");
-        $name = $this->input->post("name");
-        $website = $this->input->post("website");
-        
-        $user =$this->session->userdata('username');
-        $developer = $this->get_developer($user);
-    
-        $sql = "INSERT INTO portfolio (product_name,product_desc,projectcategory,developer_id,website) " .
-        "VALUES (" . $this->db->escape($name) . ",".$this->db->escape($desc) .",
-           ".$this->db->escape($category) .
-         ",".$this->db->escape($developer) .
-         ",".$this->db->escape($website) .")";
 
-          $this->db->query($sql);
-      }
  
-  function online(){
-      $query = $this->db->query('select username from user where online = 1');
-    return $query->result_array();}
-
-  
-
-
-
-  function editproject( ) {
-        $this->load->library('session');
-     
-        $product =  $this->input->post("selectproject");
-        $category = $this->input->post("category");
-        $desc = $this->input->post("desc");
-        $name = $this->input->post("name");
-        $website = $this->input->post("website");
-        $user =$this->session->userdata('username');
-        $developer = $this->get_developer($user);
-
-      $sql = "UPDATE portfolio SET product_name = ".$this->db->escape($name)  . ",
-     product_desc = " . $this->db->escape($desc)  . ",projectcategory = " . $this->db->escape($category) . ",website = " . $this->db->escape($website)  . 
-     " where product_name = '".$product ."' and developer_id = " . $this->db->escape($developer);
-   $this->db->query($sql);
-
-        
-      }
-
-       function deleteproject( ) {
-        $this->load->library('session');
-     
-        $product =  $this->input->post("project");
-        $category = $this->input->post("category");
-        $desc = $this->input->post("desc");
-        $name = $this->input->post("name");
-        $website = $this->input->post("website");
-        $user =$this->session->userdata('username');
-        $developer = $this->get_developer($user);
-
-      $sql = "delete from portfolio where developer_id = " . $this->db->escape($developer)  . " and product_name = '".$product ."'";
-      $this->db->query($sql);
-
-        
-      }
-
-
    public function changeuseravatar() {
      $upload_data = $this->upload->data(); 
       $ppic =   $upload_data['file_name'];
@@ -255,7 +220,7 @@ class supervisor_model extends CI_Model {
         $this->db->query($sql);
       }
 
-    function editdetails(){
+   public function editdetails(){
         $this->load->library('session');
         $user =$this->session->userdata('username');
             $username = $this->input->post("username");
@@ -286,8 +251,7 @@ class supervisor_model extends CI_Model {
 
      
     }   
-    
-
+ 
 
 
 }

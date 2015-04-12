@@ -32,14 +32,15 @@
               </li>
                     <li><a href="#"><i class="fa fa-user"></i><span>Students</span></a>
                 <ul class="sub-menu">
-                  <li><a href="ui-elements.html">Interns</a></li>
-                  <li><a href="ui-buttons.html">Fellows</a></li>
-                </ul>
+                   <li><a href="<?php echo base_url('index.php/supervisor/supervisorintern');?>">Interns</a></li>
+                   <li><a href="<?php echo base_url('index.php/supervisor/supervisorfellow')?>">Fellows</a></li>
+                 </ul>
               </li>
               <li><a href="#"><i class="fa fa-table"></i><span>Reports</span></a>
                 <ul class="sub-menu">
-                  <li><a href="tables-general.html">Interns</a></li>
-                  <li><a href="tables-datatables.html">Fellows</a></li>
+                  
+                  <li><a href="<?php echo base_url("index.php/supervisor/project_reports");?>">Projects</a></li>
+              
                 </ul>
               </li>              
           </div>
@@ -120,24 +121,26 @@
               
               <div id="settings" class="tab-pane cont">
                 <h3 class="widget-title">Change Account Password</h3>
+                   <div id= 'passmessage'></div>
+          
                 <div class="row friends-list">
-                            <form role="form" class="form-horizontal">
+                            <form role="form" class="form-horizontal" onsubmit="return changepassword()" id = "changepassword">
              
                   <div class="form-group spacer2">
                     <div class="col-sm-3"></div>
-                    <label class="col-sm-9" for="inputPassword3">Change Password</label>
+                    <label class="col-sm-9">Change Password</label>
 
                   </div>
-                  <div class="form-group">
-                    <label class="col-sm-3 control-label" for="inputPassword3">Password</label>
+                  <div class="form-group">  
+                    <label class="col-sm-3 control-label" for="password">Password</label>
                     <div class="col-sm-9">
-                      <input type="password" placeholder="Password" id="inputPassword3" class="form-control">
+                      <input name="password" type="password" placeholder="Password" id="password" class="form-control">
                     </div>
                   </div>
                   <div class="form-group">
-                    <label class="col-sm-3 control-label" for="inputPassword4">Repeat Password</label>
+                    <label class="col-sm-3 control-label" for="cpassword">Repeat Password</label>
                     <div class="col-sm-9">
-                      <input type="password" placeholder="Password" id="inputPassword4" class="form-control">
+                      <input type="password" placeholder="cpassword" id="cpassword" name="cpassword" class="form-control">
                     </div>
                   </div>
                   <div class="form-group">
@@ -262,7 +265,48 @@
     return false;
 
     }
+           function changepassword(){
+      $.ajax({
+      type: 'post',
+      url:'<?php echo base_url("/index.php/user/changepassword")?>',
+      data:$('#changepassword').serialize(),
+      success:
+        function(data){
+          if (data == '1'){
+             $('#passmessage').attr("class" ,"alert alert-success alert-white-alt rounded");
+             $('#passmessage').append("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
+             $('#passmessage').append("<div class='icon'><i class='fa fa-check'></i></div>");
+             $('#passmessage').append("<strong>Success!</strong> Changes has been saved successfully!"); 
 
+            
+          }
+          else if (data == '3'){
+            
+             $('#passmessage').attr("class" ,"alert alert-danger alert-white-alt rounded");
+             $('#passmessage').append("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
+             $('#passmessage').append("<div class='icon'><i class='fa fa-warning'></i></div>");
+             $('#passmessage').append("<strong>Error!</strong> validation error "); 
+          }
+
+          else {
+
+
+             $('#passmessage').attr("class" ,"alert alert-danger alert-white-alt rounded");
+             $('#passmessage').append("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
+             $('#passmessage').append("<div class='icon'><i class='fa fa-warning'></i></div>");
+             $('#passmessage').append("<strong>Error!</strong> password do not match"); 
+          }
+        },
+      fail:
+        function(data){
+          console.log(data);
+        }
+
+    });
+    
+    return false;
+
+    }
       function changeavatars(){
 
     var form = document.getElementById('avatars');

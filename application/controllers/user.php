@@ -35,12 +35,13 @@ private $username;
     }
     else {
        $passw = $this->users_model->logindetails();
-
+       $usertype = $this->users_model-> usertype();
        if(md5($this->input->post("password")) == $passw){
           $this->load->library('session');
           $newdata = array(
                 'username'  => $this->input->post("username"),
-                'logged_in' => TRUE
+                'logged_in' => TRUE,
+                'usertype' => $usertype
                );
 
         $this->session->set_userdata($newdata);
@@ -85,7 +86,6 @@ private $username;
 
   	public function logout(){
   		$this->load->library('session');
-        $this->users_model->logout($this->session->userdata('username'));
         $newdata = array(
         'logged_in' => FALSE);
 
@@ -142,5 +142,38 @@ private $username;
     }
 	
 }
+
+  
+  public function changepassword()
+  {
+     $this->load->helper(array('form', 'url'));
+
+     $this->load->library('form_validation');
+
+            $this->form_validation->set_rules('password', 'Password  ', 'required'); 
+      $this->form_validation->set_rules('cpassword', 'C Password  ', 'required'); 
+                            
+
+    if ($this->form_validation->run() == FALSE){
+     $data['success']=("") ;
+ 
+          echo "3";  
+    }
+    else {
+      if(set_value('password') === set_value('cpassword')){
+
+           $this->users_model->changepassword();
+              echo "1";          
+      }
+      else{
+            
+            echo "0";      
+
+      }
+      
+    }
+  
+}
+
 }
 

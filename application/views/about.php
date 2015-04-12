@@ -68,7 +68,7 @@
 								<h4>Application Deadline : <?php echo $ivacancies[$i]['application_deadline']?></h4>
 								
 								<div class="spacer2">
-									<a href="<?php echo base_url('index.php/student/applyinternship'.'/'.$ivacancies[$i]['vacancy_id']);?>"  type="button" class="btn btn-primary"><i class="fa fa-folder-open-o"></i> Apply Fellowship</a>
+									<a href="<?php echo base_url('index.php/student/applyinternship'.'/'.$ivacancies[$i]['vacancy_id']);?>"  type="button" class="btn btn-primary"><i class="fa fa-folder-open-o"></i> Apply Internship</a>
 								</div>
                          </div>
          			</div>

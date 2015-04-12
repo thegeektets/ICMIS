@@ -28,6 +28,7 @@ class Student extends CI_Controller {
     $this->load->view('includes/menu' , $data);
     $this->load->view('student/index' , $data);
     $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
 	
 
 	}
@@ -74,6 +75,224 @@ class Student extends CI_Controller {
       
      
       }
+  function project_reports(){
+   $this->load->library('session');
+   $this->load->helper(array('form', 'url'));
+
+  if($this->session->userdata('logged_in') == "TRUE"
+      and $this->session->userdata('usertype') == "student" ) {
+    
+     $data['student'] = $this->student_model->get_student($this->session->userdata('username'));
+
+     if($data['student']['0']['student_state'] == "ongoing"){
+
+     $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+  
+     $data['projects'] =$this->student_model->get_projects($this->session->userdata('username'));
+     
+
+    $this->load->view('includes/header');
+    $this->load->view('includes/menu' , $data);
+    $this->load->view('student/project_reports' , $data);
+    $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
+  }
+  else{
+            $data['message'] = 'Applications Must Be Approved';
+            $this->load->view('includes/header');
+            $this->load->view('access_denied',$data);
+            $this->load->view('includes/footer');
+    
+  }
+   }else{
+            $data['message'] = 'Login Required'.'!' ;
+            $this->load->view('includes/header');
+            $this->load->view('access_denied',$data);
+            $this->load->view('includes/footer');
+  
+}
+ 
+  }
+
+  function project_report($project_id){
+   $this->load->library('session');
+   $this->load->helper(array('form', 'url'));
+
+   if($this->session->userdata('logged_in') == "TRUE"
+      and $this->session->userdata('usertype') == "student" ) {
+  
+     $data['student'] = $this->student_model->get_student($this->session->userdata('username'));
+   if($data['student']['0']['student_state'] == "ongoing"){
+
+     $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+  
+     $data['project'] =$this->student_model->get_project($project_id);
+     $data['projecttasks'] =$this->student_model->get_projecttasks($project_id);
+     
+     
+
+    $this->load->view('includes/header');
+    $this->load->view('includes/menu' , $data);
+    $this->load->view('student/project_report' , $data);
+    $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
+    }
+    else{
+        $data['message'] = 'Login Required'.'!' ;
+            $this->load->view('includes/header');
+            $this->load->view('access_denied',$data);
+            $this->load->view('includes/footer');
+       
+    }
+   }
+   else{
+        $data['message'] = 'Applications Must Be Approved'.'!' ;
+            $this->load->view('includes/header');
+            $this->load->view('access_denied',$data);
+            $this->load->view('includes/footer');
+       
+    }
+  }
+  //loads the edit_projects page with the necessary data and tools
+
+  function projects(){
+   $this->load->library('session');
+   $this->load->helper(array('form', 'url'));
+
+    if($this->session->userdata('logged_in') == "TRUE"
+      and $this->session->userdata('usertype') == "student" ) {
+      $data['student'] = $this->student_model->get_student($this->session->userdata('username'));
+            
+      if($data['student']['0']['student_state'] == "ongoing"){
+
+      $data['student'] = $this->student_model->get_student($this->session->userdata('username'));
+      $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+  
+      $data['projects'] =$this->student_model->get_projects($this->session->userdata('username'));
+      $data['success']=("") ;
+    
+    $this->load->view('includes/header');
+    $this->load->view('includes/menu' , $data);
+    $this->load->view('student/project' , $data);
+    $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
+        }
+        else{
+            $data['message'] = 'Applications Must Be Approved';
+                $this->load->view('includes/header');
+                $this->load->view('access_denied',$data);
+                $this->load->view('includes/footer');
+
+        }
+ 
+    }
+    else{
+          $data['message'] = 'Login Required'.'!' ;
+            $this->load->view('includes/header');
+            $this->load->view('access_denied',$data);
+            $this->load->view('includes/footer');
+   
+      }
+        
+      }
+   
+
+function addproject(){
+      $this->load->helper(array('form', 'url'));
+      $this->load->library('form_validation');
+      $this->form_validation->set_rules('name','name', 'required'); 
+      $this->form_validation->set_rules('category','category', 'required'); 
+      $this->form_validation->set_rules('desc','description', 'required'); 
+
+   if ($this->form_validation->run() == FALSE){
+         echo "0";
+    }
+    else {
+    
+     $this->load->library('session');
+     $this->student_model->addproject();
+      echo "1";
+     
+    }
+
+  }
+ function addtool(){
+       $this->load->library('session');
+ 
+      $this->load->helper(array('form', 'url'));
+      $this->load->library('form_validation');
+      $this->form_validation->set_rules('project','project', 'required'); 
+     
+
+      $this->form_validation->set_rules('s_date','s_date', 'required'); 
+      $this->form_validation->set_rules('e_date','e_date', 'required'); 
+      $this->form_validation->set_rules('tasks','tasks', 'required'); 
+      
+
+   
+   if ($this->form_validation->run() == FALSE){
+         echo "0";
+         echo form_error();
+    }
+    else {
+    $project = $this->input->post("project");
+
+
+    $projectid = $this->student_model->get_projectid($project);
+         
+     $this->load->library('session');
+     $this->student_model->add_tool($projectid);
+     echo "1";
+     
+    }
+
+
+ }
+
+//edit projects function 
+
+  function editproject(){
+
+    $this->load->helper(array('form', 'url'));
+      $this->load->library('form_validation');
+      $this->form_validation->set_rules('name','name', 'required'); 
+      $this->form_validation->set_rules('category','category', 'required'); 
+      $this->form_validation->set_rules('desc','description', 'required'); 
+      
+   if ($this->form_validation->run() == FALSE){
+          echo "0";
+          echo form_error();
+
+    }
+    else {
+      $this->student_model->editproject();
+      echo "1";
+
+    }
+
+  }
+
+  //edit projects function 
+
+  function deleteproject(){
+      $this->load->helper(array('form', 'url'));
+      $this->load->library('form_validation');
+      
+      $this->form_validation->set_rules('project','project', 'required'); 
+          //$this->form_validation->set_rules('avatar','avatar', 'required'); 
+
+   if ($this->form_validation->run() == FALSE){
+          echo "0";
+    }
+    else {
+      $this->student_model->deleteproject();
+      echo "1";
+
+    }
+
+  }
+
+
 
   //allows you to edit the details of a user
  function editstudent(){
@@ -81,6 +300,7 @@ class Student extends CI_Controller {
 
      $this->load->library('form_validation');
 
+            $this->form_validation->set_rules('student_id','Student Id ', 'required');
             $this->form_validation->set_rules('name','Fullname ', 'required'); 
             $this->form_validation->set_rules('username', 'username ', 'required'); 
             $this->form_validation->set_rules('email', 'Email ', 'required|valid_email'); 
@@ -102,8 +322,33 @@ class Student extends CI_Controller {
      echo "1" ;
     }
 }
-  function editstudentdetails($username){
+  function editstudentdetails(){
+            $this->load->library('session');
+            $this->load->helper(array('form', 'url'));
+            $this->load->library('form_validation');
+
+            $this->form_validation->set_rules('student_id','Student Id ', 'required');
+            $this->form_validation->set_rules('student_name', "Applicants' Name", 'required'); 
+            $this->form_validation->set_rules('student_gender', "Applicants' Gender", 'required'); 
+            $this->form_validation->set_rules('student_dob', "Applicants' DOB", 'required'); 
+            $this->form_validation->set_rules('student_email', "Applicants' Email", 'required|valid_email'); 
+            $this->form_validation->set_rules('student_phone', "Applicants' Phone", 'required'); 
+            $this->form_validation->set_rules('student_nationality', "Applicants' Nationality", 'required'); 
+            $this->form_validation->set_rules('student_nextofkin', "Applicants' Next of Kin", 'required'); 
+            $this->form_validation->set_rules('student_nextofkincontact', "Next of Kin Contacts", 'required'); 
+            $this->form_validation->set_rules('student_institution', "Applicants' Institution", 'required');
+
+             if ($this->form_validation->run() == FALSE){
+
+                  echo 0 ;
+                    }
+            
+            else {
+            
+                 $this->student_model->editstudentdetails();
+                 echo 1;
     
+    }
   }
 
   function applyinternship($vacancyid){
@@ -130,27 +375,12 @@ class Student extends CI_Controller {
     $this->load->view('includes/menu' , $data);
     $this->load->view('student/apply_internship',$data);
     $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
+  
+    $this->load->view('includes/wizard');
      }
      else
      {
-
-     $this->load->library('form_validation');
-
-            $this->form_validation->set_rules('student_name', "Applicants' Name", 'required'); 
-            $this->form_validation->set_rules('student_gender', "Applicants' Gender", 'required'); 
-            $this->form_validation->set_rules('student_dob', "Applicants' DOB", 'required'); 
-            $this->form_validation->set_rules('student_email', "Applicants' Email", 'required|valid_email'); 
-            $this->form_validation->set_rules('student_phone', "Applicants' Phone", 'required'); 
-            $this->form_validation->set_rules('student_nationality', "Applicants' Nationality", 'required'); 
-            $this->form_validation->set_rules('student_nextofkin', "Applicants' Next of Kin", 'required'); 
-            $this->form_validation->set_rules('student_nextofkincontact', "Next of Kin Contacts", 'required'); 
-            $this->form_validation->set_rules('student_institution', "Applicants' Institution", 'required'); 
-            $this->form_validation->set_rules('student_fieldofstudy', "Applicants' Field of Study", 'required'); 
-            $this->form_validation->set_rules('applicant_skills', "Applicants' Skills", 'required'); 
-            $this->form_validation->set_rules('relevantinformation', "Relevant Information", 'required'); 
-           
-
-    if ($this->form_validation->run() == FALSE){
 
     $data['success']= ("") ;
  
@@ -158,20 +388,10 @@ class Student extends CI_Controller {
     $this->load->view('includes/menu' , $data);
     $this->load->view('student/apply_internship',$data);
     $this->load->view('includes/footer');
-    
-    }
-    else {
-     $data['success']= ("Application has been sent to CDU for processing you will be notified on the progress") ;
-     $this->student_model->apply_internship($this->session->userdata('vacancyid'));
-    
+    $this->load->view('includes/datatables');
   
-    $this->load->view('includes/header');
-    $this->load->view('includes/menu' , $data);
-    $this->load->view('student/apply_internship',$data);
-    $this->load->view('includes/footer');
+    $this->load->view('includes/wizard');
     
-    }
-
   }
   
   }
@@ -189,12 +409,240 @@ class Student extends CI_Controller {
        $this->load->view('includes/header');
        $this->load->view('login',$data);
        $this->load->view('includes/footer');   
+       $this->load->view('includes/datatables');
      
     }
         
   }
 
   }
+
+  function placeinternshipapplication($vacancyid){
+
+   $this->load->library('session');
+
+     $this->load->helper(array('form', 'url'));
+     $this->load->library('form_validation');
+
+            $this->form_validation->set_rules('applicant_skills', "Applicants' Skills", 'required'); 
+            $this->form_validation->set_rules('relevantinformation', "Relevant Information", 'required'); 
+    
+        if ($this->form_validation->run() == FALSE){
+
+              echo "0"  ;
+    
+    }
+    else {
+     $this->student_model->apply_internship($vacancyid);
+     echo "1" ;
+    }           
+
+
+
+  }
+    //upload cover letter
+    function iuploadcover($vacancyid){
+       $this->load->library('session');
+       
+       $this->load->helper(array('form', 'url'));
+
+       $config['upload_path'] = './assets/coverletter/';
+       $config['allowed_types'] = 'doc|docx|pdf|odt';
+       $config['max_size'] = '10000';
+       $config['overwrite'] = FALSE; 
+       $this->load->library('upload', $config);
+       $this->upload->initialize($config);
+       $applicant_coverletter = 'applicant_coverletter' ;
+
+         if($this->upload->do_upload($applicant_coverletter)){
+             $this->load->library('session');
+         //   $error = $this->upload->display_errors();
+            $this->student_model->iuploadcover($vacancyid);
+           
+            echo "1";
+      }
+      else{
+             $error = $this->upload->display_errors();
+              echo $error;
+               echo "0";
+      }
+
+    }
+
+
+
+    function iuploadcv($vacancyid){
+       $this->load->library('session');
+       
+       $this->load->helper(array('form', 'url'));
+
+       $config['upload_path'] = './assets/cv/';
+       $config['allowed_types'] = 'doc|docx|pdf|odt';
+       $config['max_size'] = '10000';
+       $config['overwrite'] = FALSE; 
+       $this->load->library('upload', $config);
+       $this->upload->initialize($config);
+       $applicant_curriculumvitae = 'applicant_curriculumvitae' ;
+
+         if($this->upload->do_upload($applicant_curriculumvitae)){
+             $this->load->library('session');
+         //   $error = $this->upload->display_errors();
+            $this->student_model->iuploadcv($vacancyid);
+           
+            echo "1";
+      }
+      else{
+             $error = $this->upload->display_errors();
+              echo $error;
+               echo "0";
+      }
+
+    }
+
+    function iuploadil($vacancyid){
+       $this->load->library('session');
+       
+       $this->load->helper(array('form', 'url'));
+
+       $config['upload_path'] = './assets/introductionletter/';
+       $config['allowed_types'] = 'doc|docx|pdf|odt';
+       $config['max_size'] = '10000';
+       $config['overwrite'] = FALSE; 
+       $this->load->library('upload', $config);
+       $this->upload->initialize($config);
+       $introductionletter = 'introductionletter' ;
+
+         if($this->upload->do_upload($introductionletter)){
+             $this->load->library('session');
+         //   $error = $this->upload->display_errors();
+            $this->student_model->iuploadil($vacancyid);
+           
+            echo "1";
+      }
+      else{
+             $error = $this->upload->display_errors();
+              echo $error;
+               echo "0";
+      }
+
+    }
+
+
+
+  function placefellowshipapplication($vacancyid){
+
+   $this->load->library('session');
+
+     $this->load->helper(array('form', 'url'));
+     $this->load->library('form_validation');
+
+            $this->form_validation->set_rules('applicant_skills', "Applicants' Skills", 'required'); 
+            $this->form_validation->set_rules('relevantinformation', "Relevant Information", 'required'); 
+            $this->form_validation->set_rules('research_title', "Proposed Research Title", 'required'); 
+    
+        if ($this->form_validation->run() == FALSE){
+
+              echo "0"  ;
+    
+    }
+    else {
+     $this->student_model->apply_fellowship($vacancyid);
+     echo "1" ;
+    }           
+
+
+
+  }
+
+
+  //upload cover letter
+    function uploadcover($vacancyid){
+       $this->load->library('session');
+       
+       $this->load->helper(array('form', 'url'));
+
+       $config['upload_path'] = './assets/coverletter/';
+       $config['allowed_types'] = 'doc|docx|pdf|odt';
+       $config['max_size'] = '10000';
+       $config['overwrite'] = FALSE; 
+       $this->load->library('upload', $config);
+       $this->upload->initialize($config);
+       $applicant_coverletter = 'applicant_coverletter' ;
+
+         if($this->upload->do_upload($applicant_coverletter)){
+             $this->load->library('session');
+         //   $error = $this->upload->display_errors();
+            $this->student_model->uploadcover($vacancyid);
+           
+            echo "1";
+      }
+      else{
+             $error = $this->upload->display_errors();
+              echo $error;
+               echo "0";
+      }
+
+    }
+
+
+
+    function uploadcv($vacancyid){
+       $this->load->library('session');
+       
+       $this->load->helper(array('form', 'url'));
+
+       $config['upload_path'] = './assets/cv/';
+       $config['allowed_types'] = 'doc|docx|pdf|odt';
+       $config['max_size'] = '10000';
+       $config['overwrite'] = FALSE; 
+       $this->load->library('upload', $config);
+       $this->upload->initialize($config);
+       $applicant_curriculumvitae = 'applicant_curriculumvitae' ;
+
+         if($this->upload->do_upload($applicant_curriculumvitae)){
+             $this->load->library('session');
+         //   $error = $this->upload->display_errors();
+            $this->student_model->uploadcv($vacancyid);
+           
+            echo "1";
+      }
+      else{
+             $error = $this->upload->display_errors();
+              echo $error;
+               echo "0";
+      }
+
+    }
+
+    function uploadil($vacancyid){
+       $this->load->library('session');
+       
+       $this->load->helper(array('form', 'url'));
+
+       $config['upload_path'] = './assets/introductionletter/';
+       $config['allowed_types'] = 'doc|docx|pdf|odt';
+       $config['max_size'] = '10000';
+       $config['overwrite'] = FALSE; 
+       $this->load->library('upload', $config);
+       $this->upload->initialize($config);
+       $introductionletter = 'introductionletter' ;
+
+         if($this->upload->do_upload($introductionletter)){
+             $this->load->library('session');
+         //   $error = $this->upload->display_errors();
+            $this->student_model->uploadil($vacancyid);
+           
+            echo "1";
+      }
+      else{
+             $error = $this->upload->display_errors();
+              echo $error;
+               echo "0";
+      }
+
+    }
+
+
 
     function applyfellowship($vacancyid){
   
@@ -214,55 +662,25 @@ class Student extends CI_Controller {
     
       if(count($this->student_model->check_fapplication($vacancyid))>0){
 
-      $data['success']= ("You have already made this application edit application to change your submissions") ;
+      $data['success']= ("You have already made this application another submission will edit your application.") ;
   
     $this->load->view('includes/header');
     $this->load->view('includes/menu' , $data);
     $this->load->view('student/apply_fellowship',$data);
     $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
+
     $this->load->view('includes/wizard');
      }
      else
      {
 
-     $this->load->library('form_validation');
-
-            $this->form_validation->set_rules('student_name', "Applicants' Name", 'required'); 
-            $this->form_validation->set_rules('student_gender', "Applicants' Gender", 'required'); 
-            $this->form_validation->set_rules('student_dob', "Applicants' DOB", 'required'); 
-            $this->form_validation->set_rules('student_email', "Applicants' Email", 'required|valid_email'); 
-            $this->form_validation->set_rules('student_phone', "Applicants' Phone", 'required'); 
-            $this->form_validation->set_rules('student_nationality', "Applicants' Nationality", 'required'); 
-            $this->form_validation->set_rules('student_nextofkin', "Applicants' Next of Kin", 'required'); 
-            $this->form_validation->set_rules('student_nextofkincontact', "Next of Kin Contacts", 'required'); 
-            $this->form_validation->set_rules('student_institution', "Applicants' Institution", 'required'); 
-            $this->form_validation->set_rules('student_fieldofstudy', "Applicants' Field of Study", 'required'); 
-            $this->form_validation->set_rules('applicant_skills', "Applicants' Skills", 'required'); 
-            $this->form_validation->set_rules('relevantinformation', "Relevant Information", 'required'); 
-            $this->form_validation->set_rules('research_title', "Proposed Research Title", 'required'); 
-           
-
-    if ($this->form_validation->run() == FALSE){
-
-    $data['success']= ("") ;
  
     $this->load->view('includes/header');
     $this->load->view('includes/menu' , $data);
     $this->load->view('student/apply_fellowship',$data);
-    $this->load->view('includes/footer');
-    $this->load->view('includes/wizard');
+    $this->load->view('includes/datatables');
   
-    
-    }
-    else {
-     $data['success']= ("Application has been sent to CDU for processing you will be notified on the progress") ;
-     $this->uploadcoverletter();
-     $this->student_model->apply_fellowship($this->session->userdata('vacancyid'));
-    
-  
-    $this->load->view('includes/header');
-    $this->load->view('includes/menu' , $data);
-    $this->load->view('student/apply_fellowship',$data);
     $this->load->view('includes/footer');
     $this->load->view('includes/wizard');
   
@@ -271,7 +689,7 @@ class Student extends CI_Controller {
 
   }
   
-  }
+  
   else{
 
       $data['success']=("Login Required to Apply Fellowship") ;
@@ -286,6 +704,7 @@ class Student extends CI_Controller {
        $this->load->view('includes/header');
        $this->load->view('login',$data);
        $this->load->view('includes/footer');   
+       $this->load->view('includes/datatables');
      
     }
         
@@ -348,34 +767,7 @@ class Student extends CI_Controller {
 
     }
 
-      //upload cover letter
-    function uploadcoverletter(){
-       $this->load->library('session');
-       
-       $this->load->helper(array('form', 'url'));
-
-       $config['upload_path'] = './assets/coverletter/';
-       $config['allowed_types'] = 'docx|pdf|doc|odt';
-       $config['max_size'] = '10000';
-       $config['overwrite'] = FALSE; 
-       $this->load->library('upload', $config);
-       $this->upload->initialize($config);
-      $applicant_coverletter = 'applicant_coverletter' ;
-
-         if($this->upload->do_upload($applicant_coverletter)){
-             $this->load->library('session');
-         //   $error = $this->upload->display_errors();
-         //   $this->student_model->changeuseravatar();
-           
-            echo "1";
-      }
-      else{
-             $error = $this->upload->display_errors();
-              echo $error;
-               echo "0";
-      }
-
-    }
+     
 
 
 

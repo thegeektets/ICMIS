@@ -5,7 +5,8 @@ class Supervisor extends CI_Controller {
     {
     parent::__construct();
     $this->load->model('users_model');
-     $this->load->model('supervisor_model');
+    $this->load->model('supervisor_model');
+    $this->load->model('student_model');
     
     
     }
@@ -25,11 +26,54 @@ class Supervisor extends CI_Controller {
     $this->load->view('includes/menu' ,$data);
     $this->load->view('supervisor/index' , $data);
     $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
 	
 
 	}
 
+  //students
 
+  public function supervisorintern(){
+      
+   $this->load->library('session');
+    
+   $this->load->helper('url');
+    
+   $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+
+   $data['interns'] = $this->supervisor_model->get_supervisorinterns();
+   
+   
+    $this->load->view('includes/header');
+    $this->load->view('includes/menu' ,$data);
+    $this->load->view('supervisor/supervisorinterns' , $data);
+    $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
+
+  }
+
+
+  public function supervisorfellow(){
+      
+   $this->load->library('session');
+    
+   $this->load->helper('url');
+    
+   $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+
+   $data['fellows'] = $this->supervisor_model->get_supervisorfellows();
+   
+    $this->load->view('includes/header');
+    $this->load->view('includes/menu' ,$data);
+
+    $this->load->view('supervisor/supervisorfellows' , $data);
+    $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
+
+  }
+ 
+
+  //requests
     
   public  function newinternrequest(){
     	$this->load->library('session');
@@ -48,13 +92,13 @@ class Supervisor extends CI_Controller {
             $this->form_validation->set_rules('costcenter', 'Cost Center ', 'required'); 
             $this->form_validation->set_rules('region', 'Region of Internship  ', 'required');                   
             $this->form_validation->set_rules('country', 'country of Internship  ', 'required');
-			$this->form_validation->set_rules('tors', 'Terms of Reference ', 'required');
-			$this->form_validation->set_rules('expected', 'Expected Output ', 'required');
-			$this->form_validation->set_rules('enddate', 'End Date ', 'required');
-			$this->form_validation->set_rules('startdate', 'Start Date ', 'required');
-			$this->form_validation->set_rules('budgetholder', 'Budget Holder ', 'required');
-			$this->form_validation->set_rules('budgetholderemail', 'Budget Holder Email ', 'required|valid_email');
-			
+      			$this->form_validation->set_rules('tors', 'Terms of Reference ', 'required');
+      			$this->form_validation->set_rules('expected', 'Expected Output ', 'required');
+      			$this->form_validation->set_rules('enddate', 'End Date ', 'required');
+      			$this->form_validation->set_rules('startdate', 'Start Date ', 'required');
+      			$this->form_validation->set_rules('budgetholder', 'Budget Holder ', 'required');
+      			$this->form_validation->set_rules('budgetholderemail', 'Budget Holder Email ', 'required|valid_email');
+      			
 
 
     if ($this->form_validation->run() == FALSE){
@@ -66,6 +110,22 @@ class Supervisor extends CI_Controller {
     $this->load->view('includes/menu' ,$data);
     $this->load->view('supervisor/internrequest' , $data);
     $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
+      
+    
+
+    }
+     else if($this->input->post("enddate") == $this->input->post("startdate")
+      || $this->input->post("enddate") < $this->input->post("startdate") || $this->input->post("startdate") < date('Y-m-d') ){
+
+     $data['error']= ("End Date should be greater than Start Date and Start Date greater than the Current Date") ;
+
+    $this->load->view('includes/header');
+    $this->load->view('includes/menu' ,$data);
+    $this->load->view('supervisor/internrequest' , $data);
+    $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
+    
     }
     else {
      $data['success']= ("Registration success") ;
@@ -73,12 +133,16 @@ class Supervisor extends CI_Controller {
      
    $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
    $data['supervisor'] = $this->supervisor_model->get_supervisor($this->session->userdata('username'));
-
+   $data['irequests'] = $this->supervisor_model->get_irequests($this->session->userdata('username'));
+   $data['frequests'] = $this->supervisor_model->get_frequests($this->session->userdata('username'));
+  
+  
    	$this->load->view('includes/header');
     $this->load->view('includes/menu' ,$data);
     $this->load->view('supervisor/requeststatus' , $data);
     $this->load->view('includes/footer');
-	
+	  $this->load->view('includes/datatables');
+  
     
     }
   }
@@ -118,6 +182,20 @@ class Supervisor extends CI_Controller {
     $this->load->view('includes/menu' ,$data);
     $this->load->view('supervisor/fellowrequest' , $data);
     $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
+  
+    }
+     else if($this->input->post("enddate") == $this->input->post("startdate")
+      || $this->input->post("enddate") < $this->input->post("startdate") || $this->input->post("startdate") < date('Y-m-d') ){
+
+     $data['error']= ("End Date should be greater than Start Date and Start Date greater than the Current Date") ;
+
+    $this->load->view('includes/header');
+    $this->load->view('includes/menu' ,$data);
+    $this->load->view('supervisor/fellowrequest' , $data);
+    $this->load->view('includes/footer');
+    $this->load->view('includes/datatables');
+    
     }
     else {
      $data['success']= ("Registration success") ;
@@ -125,12 +203,16 @@ class Supervisor extends CI_Controller {
      
    $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
    $data['supervisor'] = $this->supervisor_model->get_supervisor($this->session->userdata('username'));
-
+   $data['irequests'] = $this->supervisor_model->get_irequests($this->session->userdata('username'));
+   $data['frequests'] = $this->supervisor_model->get_frequests($this->session->userdata('username'));
+  
+  
    	$this->load->view('includes/header');
     $this->load->view('includes/menu' ,$data);
     $this->load->view('supervisor/requeststatus' , $data);
     $this->load->view('includes/footer');
-	
+	  $this->load->view('includes/datatables');
+  
     
     }
   }
@@ -142,13 +224,15 @@ class Supervisor extends CI_Controller {
 
    $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
    $data['supervisor'] = $this->supervisor_model->get_supervisor($this->session->userdata('username'));
-    $data['success']= ("") ;
+   $data['irequests'] = $this->supervisor_model->get_irequests($this->session->userdata('username'));
+   $data['frequests'] = $this->supervisor_model->get_frequests($this->session->userdata('username'));
   
    	$this->load->view('includes/header');
     $this->load->view('includes/menu' ,$data);
     $this->load->view('supervisor/requeststatus' , $data);
     $this->load->view('includes/footer');
- 
+    $this->load->view('includes/datatables');
+  
    
   }
 
@@ -193,14 +277,8 @@ class Supervisor extends CI_Controller {
   }
 
 
-
-
-
-           
-
-
   //function loads the portfolio of a user/developer
-  function profile($username){
+function profile($username){
           $this->load->library('session');
     
         $data['profile'] = $this->users_model->get_user($username);
@@ -238,6 +316,23 @@ class Supervisor extends CI_Controller {
           $this->index();
         }
       }
+ function project_reports(){
+     
+     $this->load->library('session');
+     $this->load->helper(array('form', 'url'));
+
+    $data['student'] = $this->student_model->get_student($this->session->userdata('username'));
+    $data['profile'] = $this->users_model->get_user($this->session->userdata('username'));
+    $data['projects'] =$this->student_model->get_studentprojects();
+     
+
+        $this->load->view('includes/header');
+        $this->load->view('includes/menu' , $data);
+        $this->load->view('supervisor/project_reports' , $data);
+        $this->load->view('includes/footer');
+        $this->load->view('includes/datatables');
+ 
+  }
   //this function loads the activity pane which updates members on what is going on
       function activity(){
           $this->load->library('session');
